@@ -1,0 +1,38 @@
+/* App.css */
+
+.App {
+  text-align: center; /* Centra el texto dentro del contenedor */
+  font-family: Arial, sans-serif; /* Cambia la fuente de la aplicación */
+  background-color: #f8f9fa; /* Color de fondo claro */
+  min-height: 100vh; /* Ocupa toda la altura de la ventana */
+  padding: 20px; /* Espaciado interno */
+}
+
+.App-header {
+  background-color: #007bff; /* Color de fondo azul */
+  padding: 20px; /* Espaciado interno en el encabezado */
+  color: white; /* Color del texto */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+.App-main {
+  margin-top: 20px; /* Margen superior para el área principal */
+  color: #333; /* Color del texto en el área principal */
+  font-size: 18px; /* Tamaño de fuente */
+}
+
+.App-footer {
+  margin-top: 40px; /* Margen superior para el pie de página */
+  font-size: 14px; /* Tamaño de fuente para el pie de página */
+  color: #666; /* Color del texto del pie de página */
+}
+
+/* Estilos para enlaces */
+.App-link {
+  color: #007bff; /* Color de los enlaces */
+  text-decoration: none; /* Sin subrayado */
+}
+
+.App-link:hover {
+  text-decoration: underline; /* Subrayar al pasar el mouse */
+}
