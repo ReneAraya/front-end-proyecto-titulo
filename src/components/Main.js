@@ -1,8 +1,8 @@
 // src/components/Main.js
 
-//Esta estructurado para que se menajen las rutas
+// Está estructurado para que se manejen las rutas
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import OfferStatus from '../pages/OfferStatus';
@@ -10,13 +10,14 @@ import OfferStatus from '../pages/OfferStatus';
 const Main = () => {
   return (
     <main>
-      <Switch>
-        <Route path="/" exact component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/offer-status" component={OfferStatus} />
-      </Switch>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/offer-status" element={<OfferStatus />} />
+      </Routes>
     </main>
   );
 };
 
 export default Main;
+

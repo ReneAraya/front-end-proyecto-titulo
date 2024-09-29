@@ -1,4 +1,3 @@
-// src/pages/OfferStatus.js
 import React from 'react';
 
 const OfferStatus = () => {

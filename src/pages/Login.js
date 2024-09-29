@@ -1,4 +1,3 @@
-// src/pages/Login.js
 import React from 'react';
 
 const Login = () => {
