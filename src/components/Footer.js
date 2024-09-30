@@ -6,11 +6,16 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <p>&copy; {new Date().getFullYear()} Tu Empresa. Todos los derechos reservados.</p>
+        <p>&copy; {new Date().getFullYear()} PUCV Escuela de Ingenieria Informatica. Todos los derechos reservados.</p>
         <ul className="social-links">
-          <li><a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a></li>
-          <li><a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a></li>
-          <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <p>Links de interés</p>
+          <a href="https://facebook.com/informatica.pucv" target="_blank" rel="noopener noreferrer">Facebook</a>
+          <br />
+          <a href="https://www.inf.ucv.cl/" target="_blank" rel="noopener noreferrer">Sitio Oficial</a>
+          <br />
+          <a href="https://x.com/secdocinfpucv" target="_blank" rel="noopener noreferrer">X</a>
+          <br />
+          <a href="https://www.instagram.com/informatica.pucv/" target="_blank" rel="noopener noreferrer">Instagram</a>
         </ul>
       </div>
     </footer>
