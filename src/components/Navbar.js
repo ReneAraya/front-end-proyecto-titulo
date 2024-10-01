@@ -7,7 +7,7 @@ export default function Navbar() {
             <Link to="/" className="site-titple">Ofertas Ayudantias</Link>
             <ul>
                 <CustomLink to="/Help">Ayuda</CustomLink>
-                <CustomLink to="/Login">Inicio Sesion</CustomLink>
+                <CustomLink to="/Login">Iniciar Sesión</CustomLink>
             </ul>
         </nav>
     )
