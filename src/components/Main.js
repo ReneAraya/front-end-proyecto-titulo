@@ -9,32 +9,18 @@ import OfferStatus from '../pages/OfferStatus';
 import Help from '../pages/Help';
 
 const Main = () => {
-  let component
-  switch (window.location.pathname) {
-    case "/":
-      component = <Home />
-      break
-    case "/inicioSesion":
-      component = <Login />
-      break
-    case "/ayuda":
-      component = <Help />
-      break
-  }
-
   return (
     <main>
       <>
-      <div className='container'>
-        {component}
-      </div>
+        <div className='container'>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/offer-status" element={<OfferStatus />} />
+            <Route path="/help" element={<Help />} />
+          </Routes>
+        </div>
       </>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/offer-status" element={<OfferStatus />} />
-        <Route path="/help" element={<Help />} />
-      </Routes>
     </main>
   );
 };

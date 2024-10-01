@@ -1,23 +1,24 @@
 
+import { useImperativeHandle } from "react"
+import { Link, useMatch, useResolvedPath } from "react-router-dom"
 export default function Navbar() {
     return (
         <nav className="nav">
-            <a href="/" className="site-titple">Ofertas Ayudantias</a>
+            <Link to="/" className="site-titple">Ofertas Ayudantias</Link>
             <ul>
-                <CustomLink href="/Help">Ayuda</CustomLink>
-                <CustomLink href="/Login">Inicio Sesion</CustomLink>
+                <CustomLink to="/Help">Ayuda</CustomLink>
+                <CustomLink to="/Login">Inicio Sesion</CustomLink>
             </ul>
         </nav>
     )
 }
 
-function CustomLink( {href, children, ...props}) {
-    const path = window.location.pathname
-
+function CustomLink( {to, children, ...props}) {
+    const ResolvedPath = useResolvedPath(to)
+    const isActive = useMatch({ path: ResolvedPath.pathname, end: true })
     return (
-        <li className={path === href ? "active" : ""}>
-            <a href={href} {...props}>{children}</a>
+        <li className={isActive ? "active" : ""}>
+            <Link to={to} {...props}>{children}</Link>
         </li>
-        
     )
 }
