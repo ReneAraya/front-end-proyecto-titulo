@@ -7,7 +7,7 @@ body {
 }
 
 .container {
-    margin: 1rem;
+    margin: 0; /* Cambia de 1rem a 0 para eliminar márgenes */
     text-align: center;
 }
 
@@ -16,10 +16,11 @@ body {
     color: white;
     display: flex;
     justify-content: space-between;
-    align-items: stretch;
-    gap: 2rem;
-    padding: 0 1rem;
+    align-items: center; /* Cambia 'stretch' a 'center' para centrar el contenido verticalmente */
+    padding: 0 1rem; /* Mantén el padding para el espacio lateral */
 }
+
+
 
 .site-title {
     font-size: 2rem;

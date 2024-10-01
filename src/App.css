@@ -5,7 +5,7 @@
   font-family: Arial, sans-serif; /* Cambia la fuente de la aplicación */
   background-color: #f8f9fa; /* Color de fondo claro */
   min-height: 100vh; /* Ocupa toda la altura de la ventana */
-  padding: 20px; /* Espaciado interno */
+  padding: 0px; /* Espaciado interno */
 }
 
 .App-header {
