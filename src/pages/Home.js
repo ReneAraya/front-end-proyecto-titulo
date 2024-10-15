@@ -1,35 +1,80 @@
 import React from 'react';
 
 const Home = () => {
-  return (
-    <div>
-      <h1>Ofertas por Carrera</h1>
-      
-      <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Dropdown button <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-      </svg>
-      </button>
+    const ofertas1 = [
+        'Oferta 1.1', 'Oferta 1.2', 'Oferta 1.3', 'Oferta 1.4',
+        'Oferta 1.5', 'Oferta 1.6', 'Oferta 1.7', 'Oferta 1.8',
+        'Oferta 1.9', 'Oferta 1.10'
+    ];
+    const ofertas2 = [
+        'Oferta 2.1', 'Oferta 2.2', 'Oferta 2.3', 'Oferta 2.4',
+        'Oferta 2.5', 'Oferta 2.6', 'Oferta 2.7', 'Oferta 2.8'
+    ];
+    const ofertas3 = [
+        'Oferta 3.1', 'Oferta 3.2', 'Oferta 3.3', 'Oferta 3.4',
+        'Oferta 3.5', 'Oferta 3.6', 'Oferta 3.7', 'Oferta 3.8',
+        'Oferta 3.9', 'Oferta 3.10'
+    ];
 
-      {/*Dropdown menu*/}
-      <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-          <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
-            </li>
-          </ul>
-      </div>
+    return (
+        <div className="container mx-auto py-4">
+            <div className="flex justify-center">
+                {/* Contenedor 1 */}
+                <div className="w-1/3 flex flex-col mx-4 bg-white p-4 rounded">
+                    <div className="mb-2 title-container text-orange-500">
+                        <h2 className="text-lg font-bold text-center">Ingeniería Informática</h2>
+                    </div>
+                    <div className="overflow-y-auto flex-1 border rounded p-4 max-h-50 bg-white">
+                        <ul className="list-disc list-inside">
+                            {ofertas1.map((oferta, index) => (
+                                <li key={index} className="my-2">
+                                    <a href={`/formulario/${index}`} className="text-cyan-500 hover:underline">
+                                        {oferta}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
 
-    </div>
-  );
+                {/* Contenedor 2 */}
+                <div className="w-1/3 flex flex-col mx-4 bg-white p-4 rounded">
+                    <div className="mb-2 title-container text-orange-500">
+                        <h2 className="text-lg font-bold text-center">Ingeniería Civil Informática</h2>
+                    </div>
+                    <div className="overflow-y-auto flex-1 border rounded p-4 max-h-50 bg-white">
+                        <ul className="list-disc list-inside">
+                            {ofertas2.map((oferta, index) => (
+                                <li key={index} className="my-2">
+                                    <a href={`/formulario/${index}`} className="text-cyan-500 hover:underline">
+                                        {oferta}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+
+                {/* Contenedor 3 */}
+                <div className="w-1/3 flex flex-col mx-4 bg-white p-4 rounded">
+                    <div className="mb-2 title-container text-orange-500">
+                        <h2 className="text-lg font-bold text-center">Ingeniería Civil en Ciencia de Datos</h2>
+                    </div>
+                    <div className="overflow-y-auto flex-1 border rounded p-4 max-h-50 bg-white">
+                        <ul className="list-disc list-inside">
+                            {ofertas3.map((oferta, index) => (
+                                <li key={index} className="my-2">
+                                    <a href={`/formulario/${index}`} className="text-cyan-500 hover:underline">
+                                        {oferta}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default Home;

@@ -1,26 +1,60 @@
+:root {
+    --margin-top-content: 0px; /* Cambia este valor para ajustar el margen superior */
+}
+
 * {
     box-sizing: border-box;
 }
 
-body {
-    margin: 0;
+html, body {
+    height: 100%; /* Asegura que html y body ocupen toda la altura */
+    margin: 0; /* Elimina márgenes por defecto */
 }
 
 .container {
-    margin: 0; /* Cambia de 1rem a 0 para eliminar márgenes */
+    display: flex;
+    flex-direction: column; /* Organiza el contenido en columna */
+    max-width: 1200px; /* Establece un ancho máximo */
+    margin: 0 auto; /* Centra el contenedor */
+    padding: 1rem; /* Padding lateral para centrar el contenido */
     text-align: center;
+    min-height: 100vh; /* Asegura que el contenedor ocupe al menos la altura de la ventana */
+    margin-top: var(--margin-top-content); /* Usa la variable para el margen superior */
+    background-color: f5f5f5; /* Cambia este valor si deseas establecer un color de fondo */
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+}
+
+.title-container {
+    height: 3rem; /* Altura fija para los títulos */
+    min-height: 3rem; /* Asegura que todos los títulos tengan la misma altura */
+}
+
+.overflow-y-auto {
+    overflow-y: auto; /* Habilita el scroll vertical */
+    max-height: 200px; /* Ajusta este valor según tus necesidades */
+}
+
+ul.list-disc {
+    padding-left: 1.5rem; /* Ajusta el padding izquierdo según sea necesario */
+}
+
+ul.list-disc li {
+    margin-bottom: 0.5rem; /* Espaciado entre elementos de la lista */
 }
 
 .nav {
-    background-color: #333;
+    background-color: #339fc3;
     color: white;
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Cambia 'stretch' a 'center' para centrar el contenido verticalmente */
-    padding: 0 1rem; /* Mantén el padding para el espacio lateral */
+    align-items: center; /* Centra el contenido verticalmente */
+    padding: 0 1rem; /* Mantiene el espacio lateral */
+    width: 100%; /* Asegura que el navbar ocupe todo el ancho */
 }
-
-
 
 .site-title {
     font-size: 2rem;
@@ -44,9 +78,42 @@ body {
 }
 
 .nav li.active {
-    background-color: #555;
+    background-color: #3d6997;
 }
 
 .nav li.hover {
-    background-color: #777;
+    background-color: #339fc3;
+}
+
+.main-content {
+    flex: 1; /* Permite que el contenido principal ocupe el espacio disponible */
+}
+
+footer {
+    width: 100%; /* Asegura que el footer ocupe todo el ancho */
+    text-align: center; /* Centra el texto del footer */
+    padding: 1rem 0; /* Espaciado superior e inferior */
+    background-color: #333; /* Color de fondo para el footer */
+    color: white; /* Color del texto para el footer */
+}
+
+/*Estilo para Home - Ofertas */
+.bg-white {
+    background-color: ffffff;
+}
+
+.text-orange-500 {
+    color: ff9b04;
+}
+
+.text-cyan-500 {
+    color: 3bbaff;
+}
+
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .w-full {
+        width: 100%; /* Asegura que cada columna ocupe el 100% en pantallas pequeñas */
+    }
 }
