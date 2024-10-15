@@ -52,10 +52,12 @@ const Home = () => {
 
     return (
         <div className="container mx-auto py-4">
+          <h1 className="text-3xl font-bold text-orange-500 text-center mb-10">Ofertas Ayudantías Primer Semestre 2025</h1>
+
             <div className="flex flex-col md:flex-row justify-center">
                 <div className="w-full md:w-1/3 flex flex-col mx-4 mb-4 md:mb-0">
                     <div className="mb-2 title-container flex justify-between items-center">
-                        <h2 className="text-lg font-bold text-orange-500 text-center flex-1">Ingeniería Informática</h2>
+                        <h2 className="text-lg font-bold text-blue-500 text-center flex-1">Ingeniería Informática</h2>
                         {isMobile && (
                             <span onClick={toggleOpen1} className="cursor-pointer text-cyan-500 ml-2">
                                 {isOpen1 ? <FaChevronUp /> : <FaChevronDown />}
@@ -79,7 +81,7 @@ const Home = () => {
 
                 <div className="w-full md:w-1/3 flex flex-col mx-4 mb-4 md:mb-0">
                     <div className="mb-2 title-container flex justify-between items-center">
-                        <h2 className="text-lg font-bold text-orange-500 text-center flex-1">Ingeniería Civil Informática</h2>
+                        <h2 className="text-lg font-bold text-blue-500 text-center flex-1">Ingeniería Civil Informática</h2>
                         {isMobile && (
                             <span onClick={toggleOpen2} className="cursor-pointer text-cyan-500 ml-2">
                                 {isOpen2 ? <FaChevronUp /> : <FaChevronDown />}
@@ -103,7 +105,7 @@ const Home = () => {
 
                 <div className="w-full md:w-1/3 flex flex-col mx-4">
                     <div className="mb-2 title-container flex justify-between items-center">
-                        <h2 className="text-lg font-bold text-orange-500 text-center flex-1">Ingeniería Civil en Ciencia de Datos</h2>
+                        <h2 className="text-lg font-bold text-blue-500 text-center flex-1">Ingeniería Civil en Ciencia de Datos</h2>
                         {isMobile && (
                             <span onClick={toggleOpen3} className="cursor-pointer text-cyan-500 ml-2">
                                 {isOpen3 ? <FaChevronUp /> : <FaChevronDown />}

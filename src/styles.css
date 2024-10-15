@@ -20,7 +20,7 @@ html, body {
     text-align: center;
     min-height: 100vh; /* Asegura que el contenedor ocupe al menos la altura de la ventana */
     margin-top: var(--margin-top-content); /* Usa la variable para el margen superior */
-    background-color: f5f5f5; /* Cambia este valor si deseas establecer un color de fondo */
+    background-color: #f5f5f5; /* Cambia este valor si deseas establecer un color de fondo */
 }
 
 .flex {
@@ -36,17 +36,40 @@ html, body {
     align-items: center; /* Centra el título verticalmente */
 }
 
-.overflow-y-auto {
+
+/* Ajustar el contenedor de ofertas */
+.list-container {
+    height: 200px; /* Establece una altura fija para el contenedor */
     overflow-y: auto; /* Habilita el scroll vertical */
-    max-height: 200px; /* Ajusta este valor según tus necesidades */
+    border: 1px solid #ddd; /* Agrega borde para distinguir el contenedor */
+    border-radius: 5px; /* Bordes redondeados */
+    background-color: #fff; /* Fondo blanco para el contenedor */
+    padding: 1rem; /* Espaciado interno */
 }
+
 
 ul.list-disc {
     padding-left: 1.5rem; /* Ajusta el padding izquierdo según sea necesario */
+    list-style-type: disc; /* Asegura que la lista use puntos */
+    color: transparent; /* Hace que el texto de los puntos sea transparente */
 }
 
 ul.list-disc li {
     margin-bottom: 0.5rem; /* Espaciado entre elementos de la lista */
+    position: relative; /* Permite usar un pseudo-elemento */
+}
+
+ul.list-disc li::before {
+    content: ""; /* Crea un pseudo-elemento */
+    display: inline-block; /* Asegura que se muestre como un bloque en línea */
+    width: 0.3rem; /* Ajusta el ancho del punto */
+    height: 0.3rem; /* Ajusta la altura del punto */
+    background-color: #aaa; /* Color plomo para el punto */
+    border-radius: 50%; /* Hace que el punto sea redondo */
+    position: absolute; /* Posiciona el punto relativo al li */
+    left: 0rem; /* Ajusta la posición del punto a la izquierda */
+    top: 50%; /* Centra el punto verticalmente */
+    transform: translateY(-50%); /* Ajusta para centrar verticalmente */
 }
 
 .nav {
@@ -109,28 +132,19 @@ footer {
     color: #ff9b04;
 }
 
+.text-blue-500 {
+    color: #3d6997;
+}
+
 .text-cyan-500 {
     color: #3bbaff;
 }
 
-/* Estilo para contenedor de ofertas */
-.ofertas-container {
-    transition: max-height 0.3s ease; /* Suaviza el cambio de altura */
-    overflow-y: auto; /* Habilita el scroll vertical */
-    height: 200px; /* Fija la altura para todas las filas */
-    max-height: 200px; /* Limita la altura máxima */
-    border: 1px solid #ddd; /* Agrega borde para distinguir el contenedor */
-    padding: 1rem; /* Espaciado interno */
-    background-color: #fff; /* Fondo blanco para el contenedor */
-    border-radius: 5px; /* Bordes redondeados */
-}
+
 
 /* Responsividad */
 @media (max-width: 768px) {
     .w-full {
         width: 100%; /* Asegura que cada columna ocupe el 100% en pantallas pequeñas */
-    }
-    .ofertas-container {
-        max-height: 150px; /* Ajusta la altura máxima en pantallas más pequeñas */
     }
 }
