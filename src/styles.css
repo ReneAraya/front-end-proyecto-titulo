@@ -31,6 +31,9 @@ html, body {
 .title-container {
     height: 3rem; /* Altura fija para los títulos */
     min-height: 3rem; /* Asegura que todos los títulos tengan la misma altura */
+    display: flex;
+    justify-content: center; /* Centra el título horizontalmente */
+    align-items: center; /* Centra el título verticalmente */
 }
 
 .overflow-y-auto {
@@ -99,21 +102,35 @@ footer {
 
 /*Estilo para Home - Ofertas */
 .bg-white {
-    background-color: ffffff;
+    background-color: #ffffff;
 }
 
 .text-orange-500 {
-    color: ff9b04;
+    color: #ff9b04;
 }
 
 .text-cyan-500 {
-    color: 3bbaff;
+    color: #3bbaff;
 }
 
+/* Estilo para contenedor de ofertas */
+.ofertas-container {
+    transition: max-height 0.3s ease; /* Suaviza el cambio de altura */
+    overflow-y: auto; /* Habilita el scroll vertical */
+    height: 200px; /* Fija la altura para todas las filas */
+    max-height: 200px; /* Limita la altura máxima */
+    border: 1px solid #ddd; /* Agrega borde para distinguir el contenedor */
+    padding: 1rem; /* Espaciado interno */
+    background-color: #fff; /* Fondo blanco para el contenedor */
+    border-radius: 5px; /* Bordes redondeados */
+}
 
 /* Responsividad */
 @media (max-width: 768px) {
     .w-full {
         width: 100%; /* Asegura que cada columna ocupe el 100% en pantallas pequeñas */
+    }
+    .ofertas-container {
+        max-height: 150px; /* Ajusta la altura máxima en pantallas más pequeñas */
     }
 }
