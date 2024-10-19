@@ -52,77 +52,83 @@ const Home = () => {
 
     return (
         <div className="container mx-auto py-4">
-          <h1 className="text-3xl font-bold text-orange-500 text-center mb-10">Ofertas Ayudantías Primer Semestre 2025</h1>
+            <h1 className="text-3xl font-bold text-orange-500 text-center mb-10">Ofertas Ayudantías Primer Semestre 2025</h1>
 
             <div className="flex flex-col md:flex-row justify-center">
-                <div className="w-full md:w-1/3 flex flex-col mx-4 mb-4 md:mb-0">
-                    <div className="mb-2 title-container flex justify-between items-center">
-                        <h2 className="text-lg font-bold text-blue-500 text-center flex-1">Ingeniería Informática</h2>
-                        {isMobile && (
-                            <span onClick={toggleOpen1} className="cursor-pointer text-cyan-500 ml-2">
-                                {isOpen1 ? <FaChevronUp /> : <FaChevronDown />}
-                            </span>
-                        )}
-                    </div>
-                    <div className={`overflow-hidden transition-all duration-500 ${isOpen1 ? 'max-h-80' : 'max-h-0'}`}>
-                        <div className="border rounded p-4 bg-white list-container">
-                            <ul className="list-disc list-inside">
-                                {ofertas1.map((oferta, index) => (
-                                    <li key={index} className="my-2">
-                                        <a href={`/formulario/${index}`} className="text-cyan-500 hover:underline">
-                                            {oferta}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
+                <div className="w-full md:w-1/3 flex flex-col mx-4 mb-6"> {/* Agregado mb-6 */}
+                    <div className="bg-white p-2 rounded-lg shadow-md max-w-xl">
+                        <div className="mb-2 title-container flex justify-between items-center">
+                            <h2 className="text-lg font-bold text-blue-500 text-center flex-1">Ingeniería Informática</h2>
+                            {isMobile && (
+                                <span onClick={toggleOpen1} className="cursor-pointer text-cyan-500 ml-2">
+                                    {isOpen1 ? <FaChevronUp /> : <FaChevronDown />}
+                                </span>
+                            )}
+                        </div>
+                        <div className={`overflow-hidden transition-all duration-500 ${isOpen1 ? 'max-h-80' : 'max-h-0'}`}>
+                            <div className="rounded p-4 bg-white list-container"> {/* Eliminada clase "border" */}
+                                <ul className="list-disc list-inside">
+                                    {ofertas1.map((oferta, index) => (
+                                        <li key={index} className="my-2">
+                                            <a href={`/formulario/${index}`} className="text-cyan-500 hover:underline">
+                                                {oferta}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="w-full md:w-1/3 flex flex-col mx-4 mb-4 md:mb-0">
-                    <div className="mb-2 title-container flex justify-between items-center">
-                        <h2 className="text-lg font-bold text-blue-500 text-center flex-1">Ingeniería Civil Informática</h2>
-                        {isMobile && (
-                            <span onClick={toggleOpen2} className="cursor-pointer text-cyan-500 ml-2">
-                                {isOpen2 ? <FaChevronUp /> : <FaChevronDown />}
-                            </span>
-                        )}
-                    </div>
-                    <div className={`overflow-hidden transition-all duration-500 ${isOpen2 ? 'max-h-80' : 'max-h-0'}`}>
-                        <div className="border rounded p-4 bg-white list-container">
-                            <ul className="list-disc list-inside">
-                                {ofertas2.map((oferta, index) => (
-                                    <li key={index} className="my-2">
-                                        <a href={`/formulario/${index}`} className="text-cyan-500 hover:underline">
-                                            {oferta}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
+                <div className="w-full md:w-1/3 flex flex-col mx-4 mb-6"> {/* Agregado mb-6 */}
+                    <div className="bg-white p-2 rounded-lg shadow-md max-w-xl">
+                        <div className="mb-2 title-container flex justify-between items-center">
+                            <h2 className="text-lg font-bold text-blue-500 text-center flex-1">Ingeniería Civil Informática</h2>
+                            {isMobile && (
+                                <span onClick={toggleOpen2} className="cursor-pointer text-cyan-500 ml-2">
+                                    {isOpen2 ? <FaChevronUp /> : <FaChevronDown />}
+                                </span>
+                            )}
+                        </div>
+                        <div className={`overflow-hidden transition-all duration-500 ${isOpen2 ? 'max-h-80' : 'max-h-0'}`}>
+                            <div className="rounded p-4 bg-white list-container"> {/* Eliminada clase "border" */}
+                                <ul className="list-disc list-inside">
+                                    {ofertas2.map((oferta, index) => (
+                                        <li key={index} className="my-2">
+                                            <a href={`/formulario/${index}`} className="text-cyan-500 hover:underline">
+                                                {oferta}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="w-full md:w-1/3 flex flex-col mx-4">
-                    <div className="mb-2 title-container flex justify-between items-center">
-                        <h2 className="text-lg font-bold text-blue-500 text-center flex-1">Ingeniería Civil en Ciencia de Datos</h2>
-                        {isMobile && (
-                            <span onClick={toggleOpen3} className="cursor-pointer text-cyan-500 ml-2">
-                                {isOpen3 ? <FaChevronUp /> : <FaChevronDown />}
-                            </span>
-                        )}
-                    </div>
-                    <div className={`overflow-hidden transition-all duration-500 ${isOpen3 ? 'max-h-80' : 'max-h-0'}`}>
-                        <div className="border rounded p-4 bg-white list-container">
-                            <ul className="list-disc list-inside">
-                                {ofertas3.map((oferta, index) => (
-                                    <li key={index} className="my-2">
-                                        <a href={`/formulario/${index}`} className="text-cyan-500 hover:underline">
-                                            {oferta}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
+                <div className="w-full md:w-1/3 flex flex-col mx-4 mb-6"> {/* Agregado mb-6 */}
+                    <div className="bg-white p-2 rounded-lg shadow-md max-w-xl">
+                        <div className="mb-2 title-container flex justify-between items-center">
+                            <h2 className="text-lg font-bold text-blue-500 text-center flex-1">Ingeniería Civil en Ciencia de Datos</h2>
+                            {isMobile && (
+                                <span onClick={toggleOpen3} className="cursor-pointer text-cyan-500 ml-2">
+                                    {isOpen3 ? <FaChevronUp /> : <FaChevronDown />}
+                                </span>
+                            )}
+                        </div>
+                        <div className={`overflow-hidden transition-all duration-500 ${isOpen3 ? 'max-h-80' : 'max-h-0'}`}>
+                            <div className="rounded p-4 bg-white list-container"> {/* Eliminada clase "border" */}
+                                <ul className="list-disc list-inside">
+                                    {ofertas3.map((oferta, index) => (
+                                        <li key={index} className="my-2">
+                                            <a href={`/formulario/${index}`} className="text-cyan-500 hover:underline">
+                                                {oferta}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -18,7 +18,7 @@ html, body {
     margin: 0 auto; /* Centra el contenedor */
     padding: 1rem; /* Padding lateral para centrar el contenido */
     text-align: center;
-    min-height: 100vh; /* Asegura que el contenedor ocupe al menos la altura de la ventana */
+    min-height: auto; /* Asegura que el contenedor ocupe al menos la altura de la ventana */
     margin-top: var(--margin-top-content); /* Usa la variable para el margen superior */
     background-color: #f5f5f5; /* Cambia este valor si deseas establecer un color de fondo */
 }
@@ -41,7 +41,7 @@ html, body {
 .list-container {
     height: 200px; /* Establece una altura fija para el contenedor */
     overflow-y: auto; /* Habilita el scroll vertical */
-    border: 1px solid #ddd; /* Agrega borde para distinguir el contenedor */
+    border: none; /* Agrega borde para distinguir el contenedor */
     border-radius: 5px; /* Bordes redondeados */
     background-color: #fff; /* Fondo blanco para el contenedor */
     padding: 1rem; /* Espaciado interno */
@@ -139,6 +139,64 @@ footer {
 .text-cyan-500 {
     color: #3bbaff;
 }
+
+
+.input-field {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ccc; /* Color del borde normal */
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.8s; /* Suaviza el cambio de color */
+}
+
+.input-field:focus {
+    border-color: #ff9b04; /* Cambia este color al que desees para el borde al enfocar */
+    outline: none; /* Elimina el borde azul predeterminado del navegador */
+    box-shadow: 0 0 5px rgba(255, 155, 0, 0.5);
+}
+
+.login-card {
+    background-color: white; /* Color de fondo de la tarjeta */
+    border-radius: 10px; /* Esquinas redondeadas */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+    padding: 2rem; /* Espaciado interno más amplio */
+    width: 100%; /* Ancho completo en dispositivos móviles */
+    max-width: 400px; /* Ancho máximo de la tarjeta */
+    text-align: center; /* Centrar el texto */
+    margin: 0 auto; /* Margen para el espacio alrededor */
+}
+
+.login-button {
+    background-color: #3d6997; /* Color azul del botón */
+    color: white; /* Color del texto del botón */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Esquinas redondeadas */
+    font-size: 1rem; /* Ajusta el tamaño de la fuente */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    transition: background-color 0.3s; /* Transición suave para el color de fondo */
+    padding: 0.5rem 1rem; /* Ajusta el padding */
+    max-width: 300px; /* Establece un ancho máximo */
+    width: 80%; /* Ancho completo en pantallas pequeñas */
+    margin: 0 auto; /* Centra el botón horizontalmente */
+    display: block; /* Asegura que el margen automático funcione */
+    margin-bottom: 1rem; /* Añadir separación entre el botón y el texto */
+}
+
+
+.login-button:hover {
+    background-color: #31485f; /* Cambiar color al pasar el ratón */
+}
+
+/* Estilo para los textos */
+.text-small {
+    font-size: 0.875rem; /* Tamaño de fuente más pequeño */
+    color: #a0a0a0; /* Color gris más claro */
+    margin: 0.25rem 0; /* Espaciado pequeño entre líneas */
+}
+
+
 
 
 
