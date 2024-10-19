@@ -1,34 +1,94 @@
-// src/pages/Help.js
+import React, { useState } from "react";
 
-import React from 'react';
+const carreras = ["Ingeniería Informática", "Ingeniería Civil", "Ingeniería en Software"];
 
-const Help = () => {
+const Ofertas = () => {
+  const [selectedCarrera, setSelectedCarrera] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [semester, setSemester] = useState(""); // Estado para el semestre seleccionado
+
+  // Lista simulada de ramos/ofertas
+  const ramos = [
+    { sigla: "INF101", nombre: "Programación I", semestre: "primer semestre" },
+    { sigla: "INF202", nombre: "Estructuras de Datos", semestre: "segundo semestre" },
+    { sigla: "INF303", nombre: "Bases de Datos", semestre: "anual" },
+    // Agrega más ramos según necesites
+  ];
+
+  // Filtrar ramos por búsqueda, carrera seleccionada y semestre
+  const filteredRamos = ramos.filter((ramo) =>
+    (ramo.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    ramo.sigla.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (ramo.semestre === semester || semester === "") // Agrega filtro por semestre
+  );
+
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-md max-w-xl">
-        <h1 className="text-3xl font-bold mb-4 text-gray-800">Ayuda y Soporte</h1>
-        
-        <p className="text-gray-600 mb-6">
-          Si tiene dudas sobre el proceso, ha detectado un error en las ofertas u otro inconveniente, por favor utilice los siguientes canales de contacto:
-        </p>
-        
-        <div className="mb-4">
-          <h3 className="text-xl font-semibold text-gray-700">Información de Contacto</h3>
-          <p className="text-gray-600"><strong>Teléfono:</strong> +123-456-7890</p>
-          <p className="text-gray-600"><strong>Email:</strong> support@example.com</p>
-        </div>
-        
-        <div className="mt-8">
-          <h3 className="text-xl font-semibold text-gray-700">Entidad para Consultas Adicionales</h3>
-          <p className="text-gray-600 mb-2">
-            Si necesita asistencia adicional, por favor dirija sus consultas a:
-          </p>
-          <p className="text-gray-600"><strong>Nombre de la Institución:</strong> XYZ University</p>
-          <p className="text-gray-600"><strong>Departamento:</strong> Departamento de Ciencias Computacionales</p>
-        </div>
+    <div className="ofertas-container flex">
+      <div className="carreras-list w-1/3 bg-white p-4">
+        <h2 className="text-orange-500 text-xl font-bold">Gestión de ofertas para ayudantías</h2>
+        <ul className="list-disc">
+          {carreras.map((carrera, index) => (
+            <li
+              key={index}
+              className={`cursor-pointer ${selectedCarrera === carrera ? "text-blue-500" : ""}`}
+              onClick={() => setSelectedCarrera(carrera)}
+            >
+              {carrera}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="ofertas-details w-2/3 bg-white p-4">
+        {selectedCarrera ? (
+          <div className="card p-4 rounded shadow">
+            <h3 className="text-blue-500 text-lg font-bold">Ofertas para {selectedCarrera}</h3>
+
+            <div className="activation-section my-4">
+              <label className="text-gray-500 flex items-center">
+                <input type="checkbox" className="mr-2" />
+                Activar todos los formularios de inscripción
+              </label>
+            </div>
+
+            <div className="search-filter flex items-center space-x-4 my-4">
+              <input
+                type="text"
+                placeholder="Buscar por nombre o sigla"
+                className="border p-2 rounded w-2/3"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <select 
+                className="border p-2 rounded"
+                value={semester} // Controlado por el estado
+                onChange={(e) => setSemester(e.target.value)} // Actualiza el semestre seleccionado
+              >
+                <option value="">Todos los semestres</option>
+                <option value="primer semestre">Primer semestre</option>
+                <option value="segundo semestre">Segundo semestre</option>
+                <option value="anual">Anual</option>
+              </select>
+            </div>
+
+            <div className="ramos-list max-h-64 overflow-y-auto">
+              {filteredRamos.map((ramo, index) => (
+                <div key={index} className="ramo-item flex items-center justify-between p-2 border-b">
+                  <div className="flex items-center">
+                    <input type="checkbox" className="mr-2" />
+                    <span>{ramo.sigla} - {ramo.nombre}</span>
+                  </div>
+                  <button className="text-blue-500">ℹ️</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <p className="text-gray-500">Selecciona una carrera para ver las ofertas.</p>
+        )}
       </div>
     </div>
   );
-}
+};
 
-export default Help;
+export default Ofertas;
