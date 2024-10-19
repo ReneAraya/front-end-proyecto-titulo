@@ -196,8 +196,10 @@ footer {
     margin: 0.25rem 0; /* Espaciado pequeño entre líneas */
 }
 
-
-
+input[type="checkbox"]:checked {
+    background-color: orange; /* Color de fondo del checkbox cuando está marcado */
+    border: 2px solid orange; /* Color del borde cuando está marcado */
+  }
 
 /* Responsividad */
 @media (max-width: 768px) {

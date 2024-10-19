@@ -185,12 +185,12 @@ const Ofertas = () => {
   return (
     <div className="ofertas-container flex">
       <div className="carreras-list w-1/3 bg-white p-4">
-        <h2 className="text-orange-500 text-xl font-bold">Gestión de ofertas para ayudantías</h2>
-        <ul className="list-disc">
+        <h2 className="mb-10 text-orange-500 text-xl font-bold">Gestión de ofertas para ayudantías</h2>
+        <ul className="list-none p-0">
           {carreras.map((carrera, index) => (
             <li
               key={index}
-              className={`cursor-pointer text-blue-500 flex items-center justify-between ${selectedCarrera === carrera ? "font-bold" : ""}`}
+              className={`mb-4 cursor-pointer text-blue-500 flex items-center justify-between ${selectedCarrera === carrera ? "font-bold" : ""}`}
               onClick={() => {
                 setSelectedCarrera(carrera);
                 setAllOffersActivated(false); // Reinicia la activación de todas las ofertas al cambiar de carrera
@@ -263,7 +263,7 @@ const Ofertas = () => {
             </div>
           </div>
         ) : (
-          <p className="text-gray-500">Selecciona una carrera para ver las ofertas.</p>
+          <p className="text-gray-500">Seleccione una carrera para ver las ofertas</p>
         )}
       </div>
     </div>

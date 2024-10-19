@@ -40,7 +40,7 @@ const Footer = () => {
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:grid-rows-2">
                 {/* Primera fila, columna izquierda */}
                 <p class="text-sm text-gray-500 sm:col-span-1 dark:text-gray-400">
-                    &copy; {new Date().getFullYear()} PUCV Escuela de Ingenieria Informatica™. Todos los derechos reservados.
+                    &copy; {new Date().getFullYear()} PUCV Escuela de Ingeniería Informática™. Todos los derechos reservados.
                 </p>
 
                 {/* Primera fila, columna derecha */}
