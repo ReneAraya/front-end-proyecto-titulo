@@ -6,7 +6,7 @@ export default function Navbar() {
         <nav className="nav">
             <Link to="/" className="site-titple">Sistema de postulaciones para Ayudantias</Link>
             <ul>
-                <CustomLink to="/Help">Ayuda</CustomLink>
+                <CustomLink to="/OfferManagement">Ofertas</CustomLink>
                 <CustomLink to="/Login">Iniciar Sesión</CustomLink>
             </ul>
         </nav>
