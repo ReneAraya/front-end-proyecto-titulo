@@ -201,6 +201,10 @@ input[type="checkbox"]:checked {
     border: 2px solid orange; /* Color del borde cuando está marcado */
   }
 
+/* ---- Sección de Estilos Personalizados para la Página de Gestión de Ofertas ---- */
+
+
+
 /* Responsividad */
 @media (max-width: 768px) {
     .w-full {
