@@ -7,8 +7,8 @@ const Ofertas = () => {
   const [selectedCarrera, setSelectedCarrera] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [semester, setSemester] = useState("");
-  const [allOffersActivated, setAllOffersActivated] = useState(false); // Estado para activar todas las ofertas
-  const [offerStates, setOfferStates] = useState({}); // Estado de cada checkbox por oferta
+  const [allOffersActivated, setAllOffersActivated] = useState(false);
+  const [offerStates, setOfferStates] = useState({});
 
   // Lista simulada de ramos/ofertas
   const ramos = [
@@ -152,7 +152,6 @@ const Ofertas = () => {
 
   ];
 
-  // Filtrar ramos por carrera, búsqueda y semestre
   const filteredRamos = ramos.filter(
     (ramo) =>
       ramo.carrera === selectedCarrera &&
@@ -161,25 +160,35 @@ const Ofertas = () => {
       (ramo.semestre === semester || semester === "")
   );
 
-  // Manejar el cambio de estado para activar o desactivar todas las ofertas
   const handleActivateAllOffers = (e) => {
     const activate = e.target.checked;
     setAllOffersActivated(activate);
 
-    // Cambia el estado de todas las ofertas de la carrera seleccionada
-    const newOfferStates = {};
+    const newOfferStates = { ...offerStates };
     filteredRamos.forEach((ramo) => {
-      newOfferStates[ramo.sigla] = activate;
+      const key = `${selectedCarrera}-${ramo.sigla}`;
+      newOfferStates[key] = activate;
     });
-    setOfferStates((prevState) => ({ ...prevState, ...newOfferStates }));
+    setOfferStates(newOfferStates);
   };
 
-  // Manejar el cambio de estado para cada oferta individual
   const handleOfferCheckboxChange = (sigla) => {
-    setOfferStates((prevState) => ({
-      ...prevState,
-      [sigla]: !prevState[sigla], // Cambia el estado del checkbox de la oferta seleccionada
-    }));
+    const key = `${selectedCarrera}-${sigla}`;
+    const newOfferStates = {
+      ...offerStates,
+      [key]: !offerStates[key],
+    };
+
+    const allChecked = filteredRamos.every((ramo) => newOfferStates[`${selectedCarrera}-${ramo.sigla}`]);
+
+    setOfferStates(newOfferStates);
+    setAllOffersActivated(allChecked);
+  };
+
+  const handleSaveChanges = () => {
+    // Aquí se implementará la funcionalidad para guardar los cambios
+    console.log("Cambios guardados:", offerStates);
+    alert("Cambios guardados exitosamente");
   };
 
   return (
@@ -193,7 +202,7 @@ const Ofertas = () => {
               className={`mb-4 cursor-pointer text-blue-500 flex items-center justify-between ${selectedCarrera === carrera ? "font-bold" : ""}`}
               onClick={() => {
                 setSelectedCarrera(carrera);
-                setAllOffersActivated(false); // Reinicia la activación de todas las ofertas al cambiar de carrera
+                setAllOffersActivated(false);
               }}
             >
               {carrera}
@@ -251,7 +260,7 @@ const Ofertas = () => {
                     <input
                       type="checkbox"
                       className="mr-2 rounded-full border-2 border-orange-500 focus:ring-orange-500 focus:ring-opacity-50"
-                      checked={!!offerStates[ramo.sigla]}
+                      checked={!!offerStates[`${selectedCarrera}-${ramo.sigla}`]}
                       onChange={() => handleOfferCheckboxChange(ramo.sigla)}
                       style={{ accentColor: "orange" }}
                     />
@@ -261,6 +270,13 @@ const Ofertas = () => {
                 </div>
               ))}
             </div>
+
+            <button
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+              onClick={handleSaveChanges}
+            >
+              Guardar cambios
+            </button>
           </div>
         ) : (
           <p className="text-gray-500">Seleccione una carrera para ver las ofertas</p>
