@@ -9,13 +9,15 @@ const Ofertas = () => {
   const [ramos, setRamos] = useState([]);
   const [profesores, setProfesores] = useState([]);
   const [searchProfessor, setSearchProfessor] = useState("");
+  const [searchRamo, setSearchRamo] = useState("");
+  const [semesterFilter, setSemesterFilter] = useState("");
+  const [allOffersActivated, setAllOffersActivated] = useState({});
+  const [offerStates, setOfferStates] = useState({});
   const [selectedProfessors, setSelectedProfessors] = useState([]);
   const [formLink, setFormLink] = useState("");
 
-  // Obtener la lista de ramos para la carrera seleccionada
   const fetchRamos = async (carrera) => {
     try {
-      console.log(`Intentando obtener ramos para la carrera: ${carrera}`);
       const response = await fetch(`/api/ramos/${encodeURIComponent(carrera)}`);
       if (!response.ok) throw new Error("Error al obtener los ramos");
       const data = await response.json();
@@ -26,7 +28,6 @@ const Ofertas = () => {
     }
   };
 
-  // Obtener todos los profesores de la base de datos
   const fetchProfessors = async () => {
     try {
       const response = await fetch("/api/profesores");
@@ -39,7 +40,6 @@ const Ofertas = () => {
     }
   };
 
-  // Obtener información del ramo seleccionado (profesores asignados y enlace)
   const fetchRamoInformation = async (ramoId) => {
     try {
       const response = await fetch(`/api/ramos/${ramoId}/informacion`);
@@ -52,7 +52,6 @@ const Ofertas = () => {
     }
   };
 
-  // Asignar un profesor a un ramo
   const handleAssignProfessor = async (profesorId) => {
     try {
       const response = await fetch(`/api/ramos/${selectedRamo.id}/asignar-profesor`, {
@@ -61,28 +60,26 @@ const Ofertas = () => {
         body: JSON.stringify({ profesor_id: profesorId }),
       });
       if (!response.ok) throw new Error("Error al asignar el profesor al ramo");
-      fetchRamoInformation(selectedRamo.id); // Refrescar la lista de profesores asignados
+      fetchRamoInformation(selectedRamo.id);
     } catch (error) {
       console.error("Error al asignar el profesor:", error);
       alert("Error al asignar el profesor al ramo");
     }
   };
 
-  // Eliminar un profesor del ramo
   const handleRemoveProfessor = async (profesorId) => {
     try {
       const response = await fetch(`/api/ramos/${selectedRamo.id}/eliminar-profesor/${profesorId}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar el profesor del ramo");
-      fetchRamoInformation(selectedRamo.id); // Refrescar la lista de profesores asignados
+      fetchRamoInformation(selectedRamo.id);
     } catch (error) {
       console.error("Error al eliminar el profesor del ramo:", error);
       alert("Error al eliminar el profesor del ramo");
     }
   };
 
-  // Guardar el enlace del formulario
   const handleSaveLink = async () => {
     try {
       const response = await fetch(`/api/ramos/${selectedRamo.id}/formulario`, {
@@ -98,25 +95,47 @@ const Ofertas = () => {
     }
   };
 
-  // Efecto al seleccionar carrera y cargar profesores
+  const handleActivateAllOffers = (e) => {
+    const activate = e.target.checked;
+    setAllOffersActivated((prev) => ({ ...prev, [selectedCarrera]: activate }));
+    const newOfferStates = { ...offerStates };
+    ramos.forEach((ramo) => {
+      if (!newOfferStates[selectedCarrera]) newOfferStates[selectedCarrera] = {};
+      newOfferStates[selectedCarrera][ramo.sigla] = activate;
+    });
+    setOfferStates(newOfferStates);
+  };
+
+  const handleOfferCheckboxChange = (sigla) => {
+    setOfferStates((prev) => ({
+      ...prev,
+      [selectedCarrera]: {
+        ...prev[selectedCarrera],
+        [sigla]: !prev[selectedCarrera]?.[sigla],
+      },
+    }));
+
+    const allChecked = ramos.every((ramo) => offerStates[selectedCarrera]?.[ramo.sigla]);
+    setAllOffersActivated((prev) => ({ ...prev, [selectedCarrera]: allChecked }));
+  };
+
   useEffect(() => {
     fetchProfessors();
     if (selectedCarrera) {
       fetchRamos(selectedCarrera);
-      setSelectedRamo(null); // Reinicia la selección de ramo
+      setSelectedRamo(null);
     }
   }, [selectedCarrera]);
 
-  // Cargar información del ramo seleccionado
   useEffect(() => {
     if (selectedRamo) fetchRamoInformation(selectedRamo.id);
   }, [selectedRamo]);
 
-  // Filtrar profesores para mostrar solo los que coinciden con el término de búsqueda
-  const filteredProfessors = profesores.filter(
-    (profesor) =>
-      profesor.nombre.toLowerCase().includes(searchProfessor.toLowerCase()) ||
-      profesor.correo.toLowerCase().includes(searchProfessor.toLowerCase())
+  const filteredRamos = ramos.filter(
+    (ramo) =>
+      (ramo.nombre.toLowerCase().includes(searchRamo.toLowerCase()) ||
+        ramo.sigla.toLowerCase().includes(searchRamo.toLowerCase())) &&
+      (semesterFilter === "" || ramo.semestre === semesterFilter)
   );
 
   return (
@@ -163,15 +182,20 @@ const Ofertas = () => {
                 onChange={(e) => setSearchProfessor(e.target.value)}
               />
               <ul>
-                {filteredProfessors.map((profesor) => (
-                  <li
-                    key={profesor.id}
-                    className="cursor-pointer p-1 hover:bg-gray-200"
-                    onClick={() => handleAssignProfessor(profesor.id)}
-                  >
-                    {`${profesor.nombre} (${profesor.correo})`}
-                  </li>
-                ))}
+                {profesores
+                  .filter((profesor) =>
+                    profesor.nombre.toLowerCase().includes(searchProfessor.toLowerCase()) ||
+                    profesor.correo.toLowerCase().includes(searchProfessor.toLowerCase())
+                  )
+                  .map((profesor) => (
+                    <li
+                      key={profesor.id}
+                      className="cursor-pointer p-1 hover:bg-gray-200"
+                      onClick={() => handleAssignProfessor(profesor.id)}
+                    >
+                      {`${profesor.nombre} (${profesor.correo})`}
+                    </li>
+                  ))}
               </ul>
             </div>
 
@@ -201,9 +225,64 @@ const Ofertas = () => {
             </p>
           </div>
         ) : selectedCarrera ? (
-          <p className="text-gray-500">Seleccione una carrera para ver los ramos</p>
+          <div>
+            <div className="activation-section my-4 flex items-center">
+              <label className="text-gray-500 flex items-center">
+                <input
+                  type="checkbox"
+                  className="mr-2 rounded-full border-2 border-orange-500 focus:ring-orange-500 focus:ring-opacity-50"
+                  checked={!!allOffersActivated[selectedCarrera]}
+                  onChange={handleActivateAllOffers}
+                  style={{ accentColor: "orange" }}
+                />
+                Activar todos los ramos
+              </label>
+            </div>
+
+            <div className="search-filter flex items-center space-x-4 my-4">
+              <div className="relative w-2/3">
+                <FaSearch className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Buscar por nombre o sigla"
+                  className="border p-2 rounded w-full pl-10"
+                  value={searchRamo}
+                  onChange={(e) => setSearchRamo(e.target.value)}
+                />
+              </div>
+              <select
+                className="border p-2 rounded"
+                value={semesterFilter}
+                onChange={(e) => setSemesterFilter(e.target.value)}
+              >
+                <option value="">Todos los semestres</option>
+                <option value="primer semestre">Primer semestre</option>
+                <option value="segundo semestre">Segundo semestre</option>
+              </select>
+            </div>
+
+            <div className="ramos-list max-h-64 overflow-y-auto border-t border-b">
+              {filteredRamos.map((ramo) => (
+                <div key={ramo.id} className="ramo-item flex items-center justify-between p-2 border-b">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      className="mr-2 rounded-full border-2 border-orange-500 focus:ring-orange-500 focus:ring-opacity-50"
+                      checked={!!offerStates[selectedCarrera]?.[ramo.sigla]}
+                      onChange={() => handleOfferCheckboxChange(ramo.sigla)}
+                      style={{ accentColor: "orange" }}
+                    />
+                    <span className="text-cyan-500">{`${ramo.sigla} - ${ramo.nombre}`}</span>
+                  </div>
+                  <button className="text-blue-500" onClick={() => setSelectedRamo(ramo)}>
+                    ℹ️
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         ) : (
-          <p className="text-gray-500">Seleccione una carrera para ver las ofertas.</p>
+          <p className="text-gray-500">Seleccione una carrera para ver los ramos</p>
         )}
       </div>
     </div>
