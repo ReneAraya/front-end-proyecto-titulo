@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './App.css'; // Asegúrate de que App.css esté aquí
 import './tailwind.css';
 import 'flowbite';
+import './styles.css';
 import App from './App';
-import"./styles.css";
 import { BrowserRouter } from "react-router-dom";
+
 //import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
