@@ -9,11 +9,11 @@ const Ofertas = () => {
   const [ramos, setRamos] = useState([]);
   const [profesores, setProfesores] = useState([]);
   const [searchProfessor, setSearchProfessor] = useState("");
-  const [searchRamo, setSearchRamo] = useState("");
+  const [searchRamo, setSearchRamo] = useState(""); // Definimos searchRamo y setSearchRamo
   const [semesterFilter, setSemesterFilter] = useState("");
   const [allOffersActivated, setAllOffersActivated] = useState({});
   const [offerStates, setOfferStates] = useState({});
-  const [selectedProfessors, setSelectedProfessors] = useState([]);
+  const [assignedProfessor, setAssignedProfessor] = useState(null);
   const [formLink, setFormLink] = useState("");
 
   const fetchRamos = async (carrera) => {
@@ -45,7 +45,7 @@ const Ofertas = () => {
       const response = await fetch(`/api/ramos/${ramoId}/informacion`);
       if (!response.ok) throw new Error("Error al obtener la información del ramo");
       const data = await response.json();
-      setSelectedProfessors(data.profesoresAsignados);
+      setAssignedProfessor(data.profesoresAsignados[0] || null);
       setFormLink(data.enlaceFormulario);
     } catch (error) {
       console.error("Error al obtener la información del ramo:", error);
@@ -67,13 +67,14 @@ const Ofertas = () => {
     }
   };
 
-  const handleRemoveProfessor = async (profesorId) => {
+  const handleRemoveProfessor = async () => {
+    if (!assignedProfessor) return;
     try {
-      const response = await fetch(`/api/ramos/${selectedRamo.id}/eliminar-profesor/${profesorId}`, {
+      const response = await fetch(`/api/ramos/${selectedRamo.id}/eliminar-profesor/${assignedProfessor.id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar el profesor del ramo");
-      fetchRamoInformation(selectedRamo.id);
+      setAssignedProfessor(null);
     } catch (error) {
       console.error("Error al eliminar el profesor del ramo:", error);
       alert("Error al eliminar el profesor del ramo");
@@ -95,7 +96,7 @@ const Ofertas = () => {
     }
   };
 
-  const handleActivateAllOffers = (e) => {
+  const handleActivateAllOffers = (e) => { // Definimos handleActivateAllOffers
     const activate = e.target.checked;
     setAllOffersActivated((prev) => ({ ...prev, [selectedCarrera]: activate }));
     const newOfferStates = { ...offerStates };
@@ -106,7 +107,7 @@ const Ofertas = () => {
     setOfferStates(newOfferStates);
   };
 
-  const handleOfferCheckboxChange = (sigla) => {
+  const handleOfferCheckboxChange = (sigla) => { // Definimos handleOfferCheckboxChange
     setOfferStates((prev) => ({
       ...prev,
       [selectedCarrera]: {
@@ -138,6 +139,12 @@ const Ofertas = () => {
       (semesterFilter === "" || ramo.semestre === semesterFilter)
   );
 
+  const filteredProfessors = profesores.filter(
+    (profesor) =>
+      profesor.nombre.toLowerCase().includes(searchProfessor.toLowerCase()) ||
+      profesor.correo.toLowerCase().includes(searchProfessor.toLowerCase())
+  );
+
   return (
     <div className="ofertas-container flex">
       <div className="carreras-list w-1/3 bg-white p-4">
@@ -163,17 +170,17 @@ const Ofertas = () => {
           <div className="card p-4 rounded shadow">
             <h3 className="text-orange-500 text-lg font-bold">{`${selectedRamo.sigla} - ${selectedRamo.nombre}`}</h3>
             <div className="profesores-section my-4">
-              <label className="text-gray-500">Profesores asignados:</label>
-              <ul>
-                {selectedProfessors.map((profesor) => (
-                  <li key={profesor.id} className="my-2 flex justify-between">
-                    {`${profesor.nombre} (${profesor.correo})`}
-                    <button className="text-red-500" onClick={() => handleRemoveProfessor(profesor.id)}>
-                      <FaTrashAlt />
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              <label className="text-gray-500">Profesor encargado:</label>
+              {assignedProfessor ? (
+                <div className="my-2 flex justify-between items-center">
+                  {`${assignedProfessor.nombre} (${assignedProfessor.correo})`}
+                  <button className="text-red-500" onClick={handleRemoveProfessor}>
+                    <FaTrashAlt />
+                  </button>
+                </div>
+              ) : (
+                <p className="text-gray-500">No hay profesor asignado</p>
+              )}
               <input
                 type="text"
                 className="border p-2 rounded w-full my-2"
@@ -182,20 +189,15 @@ const Ofertas = () => {
                 onChange={(e) => setSearchProfessor(e.target.value)}
               />
               <ul>
-                {profesores
-                  .filter((profesor) =>
-                    profesor.nombre.toLowerCase().includes(searchProfessor.toLowerCase()) ||
-                    profesor.correo.toLowerCase().includes(searchProfessor.toLowerCase())
-                  )
-                  .map((profesor) => (
-                    <li
-                      key={profesor.id}
-                      className="cursor-pointer p-1 hover:bg-gray-200"
-                      onClick={() => handleAssignProfessor(profesor.id)}
-                    >
-                      {`${profesor.nombre} (${profesor.correo})`}
-                    </li>
-                  ))}
+                {filteredProfessors.map((profesor) => (
+                  <li
+                    key={profesor.id}
+                    className="cursor-pointer p-1 hover:bg-gray-200"
+                    onClick={() => handleAssignProfessor(profesor.id)}
+                  >
+                    {`${profesor.nombre} (${profesor.correo})`}
+                  </li>
+                ))}
               </ul>
             </div>
 
