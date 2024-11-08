@@ -158,12 +158,12 @@ const Ofertas = () => {
   
   const handleOfferCheckboxChange = async (ramo) => {
     try {
-      const nuevoEstado = !offerStates[selectedCarrera.id]?.[ramo.id];
+      const newState = !offerStates[selectedCarrera.id]?.[ramo.id];
   
       await fetch(`/api/ramos/${ramo.id}/carrera/${selectedCarrera.id}/estado-oferta`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ activo: nuevoEstado }),
+        body: JSON.stringify({ activo: newState  }),
       });
   
       // Actualiza el estado después de confirmar el cambio
@@ -171,13 +171,24 @@ const Ofertas = () => {
         ...prev,
         [selectedCarrera.id]: {
           ...prev[selectedCarrera.id],
-          [ramo.id]: nuevoEstado,
+          [ramo.id]: newState ,
         },
       }));
-    } catch (error) {
-      console.error("Error al actualizar el estado de la oferta:", error);
-    }
-  };
+    // Verificar si todos los checkboxes están activos después del cambio
+    const allRamosActive = Object.values({
+      ...offerStates[selectedCarrera.id],
+      [ramo.sigla]: newState,
+    }).every((estado) => estado);
+
+    // Actualizar el estado del "checkbox general"
+    setAllOffersActivated((prev) => ({
+      ...prev,
+      [selectedCarrera.id]: allRamosActive,
+    }));
+  } catch (error) {
+    console.error("Error al actualizar el estado de la oferta:", error);
+  }
+};
 
   const filteredRamos = ramos.filter(
     (ramo) =>
