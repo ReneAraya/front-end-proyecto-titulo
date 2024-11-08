@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="mx-auto w-full max-w-screen-xl p-3 py-0 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
-            <img src="/logo_smaller-01.png" className="h-8 me-3" alt="EII PUCV" />
+            <img src="/logo_smaller-01.png" className="h-20 me-3" alt="EII PUCV" />
             <a href="https://www.inf.ucv.cl/" className="flex items-center">
               <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
             </a>
