@@ -35,19 +35,37 @@ const Ofertas = () => {
         if (!response.ok) throw new Error("Error al obtener los ramos");
         const data = await response.json();
         console.log("Ramos obtenidos:", data);
-  
         setRamos(data);
   
-        // Aquí puedes recuperar los estados de oferta y actualizarlos si es necesario
-        // Puedes agregar lógica para obtener los estados de oferta activos
+        // Recuperar el estado de las ofertas
+        const offerStatesResponse = await fetch(`/api/estado-oferta/${selectedCarrera.id}`);
+        if (offerStatesResponse.ok) {
+          const offerStatesData = await offerStatesResponse.json();
+          const newOfferStates = {};
+          offerStatesData.forEach((offer) => {
+            if (!newOfferStates[selectedCarrera.id]) {
+              newOfferStates[selectedCarrera.id] = {};
+            }
+            newOfferStates[selectedCarrera.id][offer.ramo_id] = offer.activo;
+          });
+          setOfferStates(newOfferStates);
+          
+          // Determinar si todas las ofertas están activadas para el checkbox general
+          const allActivated = data.every(ramo => newOfferStates[selectedCarrera.id]?.[ramo.id]);
+          setAllOffersActivated((prev) => ({
+            ...prev,
+            [selectedCarrera.id]: allActivated,
+          }));
+        }
       } catch (error) {
         console.error("Error al obtener los ramos:", error);
         alert("Hubo un problema al cargar los ramos. Por favor, intenta nuevamente más tarde.");
       }
     } else {
-      //console.log("Carrera no seleccionada, no se solicitarán ramos.");
+      console.log("Carrera no seleccionada, no se solicitarán ramos.");
     }
   };
+  
 
   useEffect(() => {
     //console.log("Carrera seleccionada:", selectedCarrera);

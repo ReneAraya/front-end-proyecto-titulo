@@ -92,7 +92,7 @@ const Home = () => {
                                             </li>
                                         ))
                                     ) : (
-                                        <li>No hay ofertas activas.</li>
+                                        <p className="text-black">No hay ofertas activas.</p>
                                     )}
                                 </ul>
                             </div>
@@ -122,7 +122,7 @@ const Home = () => {
                                             </li>
                                         ))
                                     ) : (
-                                        <li>No hay ofertas activas.</li>
+                                        <p className="text-black">No hay ofertas activas.</p>
                                     )}
                                 </ul>
                             </div>
@@ -152,7 +152,7 @@ const Home = () => {
                                             </li>
                                         ))
                                     ) : (
-                                        <li>No hay ofertas activas.</li>
+                                        <p className="text-black">No hay ofertas activas.</p>
                                     )}
                                 </ul>
                             </div>
