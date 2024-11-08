@@ -35,18 +35,22 @@ const Ofertas = () => {
         if (!response.ok) throw new Error("Error al obtener los ramos");
         const data = await response.json();
         console.log("Ramos obtenidos:", data);
+  
         setRamos(data);
+  
+        // Aquí puedes recuperar los estados de oferta y actualizarlos si es necesario
+        // Puedes agregar lógica para obtener los estados de oferta activos
       } catch (error) {
         console.error("Error al obtener los ramos:", error);
         alert("Hubo un problema al cargar los ramos. Por favor, intenta nuevamente más tarde.");
       }
     } else {
-      console.log("Carrera no seleccionada, no se solicitarán ramos.");
+      //console.log("Carrera no seleccionada, no se solicitarán ramos.");
     }
   };
 
   useEffect(() => {
-    console.log("Carrera seleccionada:", selectedCarrera);
+    //console.log("Carrera seleccionada:", selectedCarrera);
     fetchRamos();
   }, [selectedCarrera]);
 
@@ -140,55 +144,83 @@ const Ofertas = () => {
     }
   };
 
-  const handleActivateAllOffers = (e) => {
+  const handleActivateAllOffers = async (e) => {
     const activate = e.target.checked;
     setAllOffersActivated((prev) => ({ ...prev, [selectedCarrera.id]: activate }));
-    
+  
     const newOfferStates = { ...offerStates };
     if (!newOfferStates[selectedCarrera.id]) {
       newOfferStates[selectedCarrera.id] = {};
     }
   
-    ramos.forEach((ramo) => {
-      newOfferStates[selectedCarrera.id][ramo.id] = activate;
-    });
+    // Realiza una solicitud al backend para cada ramo para actualizar su estado
+    try {
+      for (const ramo of ramos) {
+        // Actualiza el estado local
+        newOfferStates[selectedCarrera.id][ramo.id] = activate;
   
-    setOfferStates(newOfferStates);
+        // Envía la solicitud al backend
+        const response = await fetch(`/api/ramos/${ramo.id}/carrera/${selectedCarrera.id}/estado-oferta`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ activo: activate }),
+        });
+  
+        if (!response.ok) {
+          console.error(`Error al actualizar el estado de la oferta para el ramo ${ramo.id}`);
+          continue;
+        }
+      }
+  
+      // Actualiza el estado después de procesar todas las solicitudes
+      setOfferStates(newOfferStates);
+    } catch (error) {
+      console.error("Error al activar/desactivar todas las ofertas:", error);
+    }
   };
+  
   
   const handleOfferCheckboxChange = async (ramo) => {
     try {
       const newState = !offerStates[selectedCarrera.id]?.[ramo.id];
   
-      await fetch(`/api/ramos/${ramo.id}/carrera/${selectedCarrera.id}/estado-oferta`, {
+      const response = await fetch(`/api/ramos/${ramo.id}/carrera/${selectedCarrera.id}/estado-oferta`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ activo: newState  }),
+        body: JSON.stringify({ activo: newState }),
       });
+  
+      if (!response.ok) {
+        throw new Error("Error al actualizar el estado de la oferta en el servidor");
+      }
+  
+      console.log("Estado de la oferta actualizado en la base de datos:", newState);
   
       // Actualiza el estado después de confirmar el cambio
       setOfferStates((prev) => ({
         ...prev,
         [selectedCarrera.id]: {
           ...prev[selectedCarrera.id],
-          [ramo.id]: newState ,
+          [ramo.id]: newState,
         },
       }));
-    // Verificar si todos los checkboxes están activos después del cambio
-    const allRamosActive = Object.values({
-      ...offerStates[selectedCarrera.id],
-      [ramo.sigla]: newState,
-    }).every((estado) => estado);
-
-    // Actualizar el estado del "checkbox general"
-    setAllOffersActivated((prev) => ({
-      ...prev,
-      [selectedCarrera.id]: allRamosActive,
-    }));
-  } catch (error) {
-    console.error("Error al actualizar el estado de la oferta:", error);
-  }
-};
+  
+      // Verificar si todos los checkboxes están activos después del cambio
+      const allRamosActive = Object.values({
+        ...offerStates[selectedCarrera.id],
+        [ramo.id]: newState,
+      }).every((estado) => estado);
+  
+      // Actualizar el estado del "checkbox general"
+      setAllOffersActivated((prev) => ({
+        ...prev,
+        [selectedCarrera.id]: allRamosActive,
+      }));
+    } catch (error) {
+      console.error("Error al actualizar el estado de la oferta:", error);
+    }
+  };
+  
 
   const filteredRamos = ramos.filter(
     (ramo) =>
@@ -197,7 +229,7 @@ const Ofertas = () => {
       (semesterFilter === "" || ramo.semestre === semesterFilter)
   );
   
-  console.log("Ramos filtrados para mostrar:", filteredRamos);
+  //console.log("Ramos filtrados para mostrar:", filteredRamos);
   
 
   return (
