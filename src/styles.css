@@ -7,14 +7,30 @@
 }
 
 html, body {
-    height: 100%; /* Asegura que html y body ocupen toda la altura */
-    margin: 0; /* Elimina márgenes por defecto */
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    /*font-family: 'Arial', sans-serif; /* O tu fuente preferida */
 }
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 
 .container {
     display: flex;
     flex-direction: column; /* Organiza el contenido en columna */
-    max-width: 1200px; /* Establece un ancho máximo */
+    max-width: 100%; /* Establece un ancho máximo */
     margin: 0 auto; /* Centra el contenedor */
     padding: 1rem; /* Padding lateral para centrar el contenido */
     text-align: center;
@@ -80,6 +96,7 @@ ul.list-disc li::before {
     align-items: center; /* Centra el contenido verticalmente */
     padding: 0 1rem; /* Mantiene el espacio lateral */
     width: 100%; /* Asegura que el navbar ocupe todo el ancho */
+    font-size: 1.5rem; /* Aumenta el tamaño del texto aquí */
 }
 
 .site-title {
@@ -92,6 +109,7 @@ ul.list-disc li::before {
     list-style: none;
     display: flex;
     gap: 1rem;
+    font-size: 1.25rem; /* Aumenta el tamaño del texto aquí */
 }
 
 .nav a {
@@ -111,9 +129,6 @@ ul.list-disc li::before {
     background-color: #339fc3;
 }
 
-.main-content {
-    flex: 1; /* Permite que el contenido principal ocupe el espacio disponible */
-}
 
 footer {
     width: 100%; /* Asegura que el footer ocupe todo el ancho */
@@ -122,6 +137,7 @@ footer {
     background-color: #333; /* Color de fondo para el footer */
     color: white; /* Color del texto para el footer */
 }
+
 
 /*Estilo para Home - Ofertas */
 .bg-white {

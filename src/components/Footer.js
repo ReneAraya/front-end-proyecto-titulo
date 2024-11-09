@@ -3,7 +3,8 @@ import React from 'react';
 const Footer = () => {
   return (
     <footer className="bg-white dark:bg-gray-900">
-      <div className="mx-auto w-full max-w-screen-xl p-3 py-0 lg:py-8">
+      <div className="main-content">
+      <div className="mx-auto w-full  p-3 py-0 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
             <img src="/logo_smaller-01.png" className="h-20 me-3" alt="EII PUCV" />
@@ -64,6 +65,7 @@ const Footer = () => {
             Si tiene dudas sobre el proceso, ha detectado un error en las ofertas u otro inconveniente, por favor utilice los siguientes canales de contacto.
           </p>
         </div>
+      </div>
       </div>
     </footer>
   );
