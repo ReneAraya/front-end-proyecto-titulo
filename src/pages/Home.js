@@ -86,7 +86,7 @@ const Home = () => {
                                     {ofertas1.length > 0 ? (
                                         ofertas1.map((oferta, index) => (
                                             <li key={index} className="my-2">
-                                                <a href={oferta.enlace} className="text-cyan-500 hover:underline">
+                                                <a href={oferta.enlace} className="text-cyan-500 hover:underline"target="_blank" rel="noopener noreferrer">
                                                     {`${oferta.sigla} - ${oferta.nombre}`}
                                                 </a>
                                             </li>
@@ -116,7 +116,7 @@ const Home = () => {
                                     {ofertas2.length > 0 ? (
                                         ofertas2.map((oferta, index) => (
                                             <li key={index} className="my-2">
-                                                <a href={oferta.enlace} className="text-cyan-500 hover:underline">
+                                                <a href={oferta.enlace} className="text-cyan-500 hover:underline"target="_blank" rel="noopener noreferrer">
                                                     {`${oferta.sigla} - ${oferta.nombre}`}
                                                 </a>
                                             </li>
@@ -146,7 +146,7 @@ const Home = () => {
                                     {ofertas3.length > 0 ? (
                                         ofertas3.map((oferta, index) => (
                                             <li key={index} className="my-2">
-                                                <a href={oferta.enlace} className="text-cyan-500 hover:underline">
+                                                <a href={oferta.enlace} className="text-cyan-500 hover:underline"target="_blank" rel="noopener noreferrer">
                                                     {`${oferta.sigla} - ${oferta.nombre}`}
                                                 </a>
                                             </li>
