@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronRight, FaSearch, FaTrashAlt, FaInfoCircle } from "react-icons/fa";
+import axios from 'axios';
 
 
 const Ofertas = () => {
@@ -249,6 +250,24 @@ const Ofertas = () => {
   
   //console.log("Ramos filtrados para mostrar:", filteredRamos);
   
+  const handleDownloadSheet = async () => {
+    try {
+      const response = await axios.get('/api/obtener-datos-hoja'); // Endpoint para obtener datos de la hoja de Google Sheets
+      const csvContent = response.data.values.map(row => row.join(',')).join('\n'); // Convertir datos a CSV
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'datos_hoja_calculo.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error al descargar los datos de la hoja de cálculo:', error);
+      alert('Hubo un error al intentar descargar los datos.');
+    }
+  };
 
   return (
     <div className="ofertas-container flex">
@@ -320,6 +339,9 @@ const Ofertas = () => {
               </button>
               <button className="bg-red-500 text-white p-2 rounded" onClick={() => setFormLink("")}>
                 Cancelar
+              </button>
+              <button className="bg-green-500 text-white p-2 rounded" onClick={handleDownloadSheet}>
+                Descargar datos de hoja de cálculo
               </button>
             </div>
             <p className="mt-4 text-blue-500 cursor-pointer" onClick={() => setSelectedRamo(null)}>
