@@ -7,6 +7,7 @@ const Ofertas = () => {
   const [carreras, setCarreras] = useState([]);
   const [selectedCarrera, setSelectedCarrera] = useState(null);
   const [selectedRamo, setSelectedRamo] = useState(null);
+  const [ramoId, setRamoId] = useState(null);
   const [ramos, setRamos] = useState([]);
   const [profesores, setProfesores] = useState([]);
   const [selectedProfessors, setSelectedProfessors] = useState([]);
@@ -108,6 +109,7 @@ const Ofertas = () => {
       fetchRamoInformation(selectedRamo.id);
     }
   }, [selectedRamo]);
+
 
 
   const handleAssignProfessor = async (profesorId) => {
@@ -250,34 +252,31 @@ const Ofertas = () => {
   
   //console.log("Ramos filtrados para mostrar:", filteredRamos);
   
-  // Nueva función para manejar la generación y descarga de la hoja de cálculo
-  const handleGenerateAndDownloadSheet = async () => {
-    if (!selectedRamo) {
-      alert('Por favor, seleccione un ramo para continuar.');
-      return;
-    }
-
+  async function getFormId(ramoId) {
     try {
-      const ramoId = selectedRamo.id;
+      const response = await axios.get(`http://localhost:3001/api/ramos/${ramoId}/formulario`);
+      return response.data.formId;
+    } catch (error) {
+      console.error('Error al obtener el formId:', error);
+      throw new Error('No se pudo obtener el formId');
+    }
+  }
+  
 
-      // Solicitud al backend para generar y descargar la hoja de cálculo
-      const response = await axios.post(`http://localhost:3001/api/ramos/${ramoId}/generar-y-descargar-hoja`, {}, {
-        responseType: 'blob', // Asegúrate de recibir el archivo como un blob
-      });
-
-      // Crear un enlace para descargar el archivo
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'hoja_calculo.csv'); // Nombre del archivo descargado
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+  // Nueva función para generar y descargar la hoja de cálculo
+  const handleGenerateAndDownloadSheet = async (ramoId) => {
+    try {
+      const response = await axios.post(`http://localhost:3001/api/generate_and_transfer/${ramoId}`);
+      const spreadsheetId = response.data.spreadsheetId;
+  
+      // Generar el enlace de descarga y abrirlo en una nueva ventana
+      const downloadUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
+      window.open(downloadUrl, '_blank');
     } catch (error) {
       console.error('Error al generar y descargar la hoja de cálculo:', error);
-      alert('Hubo un error al generar y descargar la hoja de cálculo.');
     }
   };
+  
 
   return (
     <div className="ofertas-container flex">
@@ -297,9 +296,8 @@ const Ofertas = () => {
             </li>
           ))}
         </ul>
-
       </div>
-
+  
       <div className="ofertas-details w-2/3 bg-white p-4">
         {selectedRamo ? (
           <div className="card p-4 rounded shadow">
@@ -320,7 +318,7 @@ const Ofertas = () => {
                   </option>
                 ))}
               </select>
-
+  
               <ul className="my-4">
                 {selectedProfessors.map((profesor) => (
                   <li key={profesor.id} className="flex justify-between">
@@ -332,7 +330,7 @@ const Ofertas = () => {
                 ))}
               </ul>
             </div>
-
+  
             <div className="form-link-section my-4">
               <label className="text-gray-500">Enlace de Google Forms:</label>
               <input
@@ -342,7 +340,7 @@ const Ofertas = () => {
                 onChange={(e) => setFormLink(e.target.value)}
               />
             </div>
-
+  
             <div className="buttons-section mt-4 flex space-x-4">
               <button className="bg-blue-500 text-white p-2 rounded" onClick={handleSaveLink}>
                 Guardar cambios
@@ -350,7 +348,7 @@ const Ofertas = () => {
               <button className="bg-red-500 text-white p-2 rounded" onClick={() => setFormLink("")}>
                 Cancelar
               </button>
-              <button className="bg-green-500 text-white p-2 rounded" onClick={handleGenerateAndDownloadSheet}>
+              <button className="bg-green-500 text-white p-2 rounded" onClick={() => handleGenerateAndDownloadSheet(selectedRamo.id)}>
                 Descargar datos de hoja de cálculo
               </button>
             </div>
@@ -372,7 +370,7 @@ const Ofertas = () => {
                 Activar todos los ramos
               </label>
             </div>
-
+  
             <div className="search-filter flex items-center space-x-4 my-4">
               <div className="relative w-2/3">
                 <FaSearch className="absolute left-3 top-3 text-gray-400" />
@@ -394,18 +392,18 @@ const Ofertas = () => {
                 <option value="segundo semestre">Segundo semestre</option>
               </select>
             </div>
-
+  
             <div className="ramos-list max-h-64 overflow-y-auto border-t border-b">
               {filteredRamos.map((ramo) => (
                 <div key={ramo.id} className="ramo-item flex items-center justify-between p-2 border-b">
                   <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    className="mr-2 rounded-full border-2 border-orange-500 focus:ring-orange-500 focus:ring-opacity-50"
-                    checked={!!offerStates[selectedCarrera.id]?.[ramo.id]} // Asegúrate de verificar por `selectedCarrera.id` y `ramo.id`
-                    onChange={() => handleOfferCheckboxChange(ramo)}
-                    style={{ accentColor: "orange" }}
-                  />
+                    <input
+                      type="checkbox"
+                      className="mr-2 rounded-full border-2 border-orange-500 focus:ring-orange-500 focus:ring-opacity-50"
+                      checked={!!offerStates[selectedCarrera.id]?.[ramo.id]} // Asegúrate de verificar por `selectedCarrera.id` y `ramo.id`
+                      onChange={() => handleOfferCheckboxChange(ramo)}
+                      style={{ accentColor: "orange" }}
+                    />
                     <span className="text-cyan-500">{`${ramo.sigla} - ${ramo.nombre}`}</span>
                   </div>
                   <button className="text-blue-500" onClick={() => setSelectedRamo(ramo)}>
