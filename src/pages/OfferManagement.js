@@ -250,22 +250,32 @@ const Ofertas = () => {
   
   //console.log("Ramos filtrados para mostrar:", filteredRamos);
   
-  const handleDownloadSheet = async () => {
-    try {
-      const response = await axios.get('/api/obtener-datos-hoja'); // Endpoint para obtener datos de la hoja de Google Sheets
-      const csvContent = response.data.values.map(row => row.join(',')).join('\n'); // Convertir datos a CSV
+  // Nueva función para manejar la generación y descarga de la hoja de cálculo
+  const handleGenerateAndDownloadSheet = async () => {
+    if (!selectedRamo) {
+      alert('Por favor, seleccione un ramo para continuar.');
+      return;
+    }
 
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
+    try {
+      const ramoId = selectedRamo.id;
+
+      // Solicitud al backend para generar y descargar la hoja de cálculo
+      const response = await axios.post(`http://localhost:3001/api/ramos/${ramoId}/generar-y-descargar-hoja`, {}, {
+        responseType: 'blob', // Asegúrate de recibir el archivo como un blob
+      });
+
+      // Crear un enlace para descargar el archivo
+      const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'datos_hoja_calculo.csv');
+      link.setAttribute('download', 'hoja_calculo.csv'); // Nombre del archivo descargado
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+      link.remove();
     } catch (error) {
-      console.error('Error al descargar los datos de la hoja de cálculo:', error);
-      alert('Hubo un error al intentar descargar los datos.');
+      console.error('Error al generar y descargar la hoja de cálculo:', error);
+      alert('Hubo un error al generar y descargar la hoja de cálculo.');
     }
   };
 
@@ -340,7 +350,7 @@ const Ofertas = () => {
               <button className="bg-red-500 text-white p-2 rounded" onClick={() => setFormLink("")}>
                 Cancelar
               </button>
-              <button className="bg-green-500 text-white p-2 rounded" onClick={handleDownloadSheet}>
+              <button className="bg-green-500 text-white p-2 rounded" onClick={handleGenerateAndDownloadSheet}>
                 Descargar datos de hoja de cálculo
               </button>
             </div>
