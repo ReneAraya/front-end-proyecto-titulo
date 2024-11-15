@@ -276,6 +276,17 @@ const Ofertas = () => {
       console.error('Error al generar y descargar la hoja de cálculo:', error);
     }
   };
+
+  const handleSendSheetToProfessors = async (ramoId) => {
+    try {
+      const response = await axios.post(`http://localhost:3001/api/ramos/${ramoId}/generar-y-enviar-hoja`);
+      alert('Hoja de cálculo generada y enviada correctamente a los docentes.');
+    } catch (error) {
+      console.error('Error al enviar la hoja de cálculo a los docentes:', error);
+      alert('Hubo un error al enviar la hoja de cálculo.');
+    }
+  };
+  
   
 
   return (
@@ -351,6 +362,10 @@ const Ofertas = () => {
               <button className="bg-green-500 text-white p-2 rounded" onClick={() => handleGenerateAndDownloadSheet(selectedRamo.id)}>
                 Descargar datos de hoja de cálculo
               </button>
+              <button className="bg-yellow-500 text-white p-2 rounded" onClick={() => handleSendSheetToProfessors(selectedRamo.id)}>
+                Enviar resultados a docentes
+              </button>
+
             </div>
             <p className="mt-4 text-blue-500 cursor-pointer" onClick={() => setSelectedRamo(null)}>
               Volver al listado de ramos
