@@ -270,7 +270,7 @@ const Ofertas = () => {
       const spreadsheetId = response.data.spreadsheetId;
   
       // Generar el enlace de descarga y abrirlo en una nueva ventana
-      const downloadUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
+      const downloadUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=xlsx`;
       window.open(downloadUrl, '_blank');
     } catch (error) {
       console.error('Error al generar y descargar la hoja de cálculo:', error);
@@ -278,15 +278,19 @@ const Ofertas = () => {
   };
 
   const handleSendSheetToProfessors = async (ramoId) => {
+    if (!ramoId) {
+      alert('El ID del ramo no está definido');
+      return;
+    }
+  
     try {
-      const response = await axios.post(`http://localhost:3001/api/ramos/${ramoId}/generar-y-enviar-hoja`);
-      alert('Hoja de cálculo generada y enviada correctamente a los docentes.');
+      const response = await axios.post(`http://localhost:3001/api/ramos/${ramoId}/enviar-hoja-a-docentes`);
+      alert('Resultados enviados a los docentes correctamente');
     } catch (error) {
       console.error('Error al enviar la hoja de cálculo a los docentes:', error);
-      alert('Hubo un error al enviar la hoja de cálculo.');
+      alert('Hubo un error al intentar enviar la hoja de cálculo a los docentes');
     }
   };
-  
   
 
   return (
@@ -362,9 +366,10 @@ const Ofertas = () => {
               <button className="bg-green-500 text-white p-2 rounded" onClick={() => handleGenerateAndDownloadSheet(selectedRamo.id)}>
                 Descargar datos de hoja de cálculo
               </button>
-              <button className="bg-yellow-500 text-white p-2 rounded" onClick={() => handleSendSheetToProfessors(selectedRamo.id)}>
+              <button className="bg-purple-500 text-white p-2 rounded" onClick={() => handleSendSheetToProfessors(selectedRamo.id)}>
                 Enviar resultados a docentes
               </button>
+
 
             </div>
             <p className="mt-4 text-blue-500 cursor-pointer" onClick={() => setSelectedRamo(null)}>
