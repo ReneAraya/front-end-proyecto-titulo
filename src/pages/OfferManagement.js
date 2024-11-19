@@ -16,6 +16,9 @@ const Ofertas = () => {
   const [allOffersActivated, setAllOffersActivated] = useState({});
   const [offerStates, setOfferStates] = useState({});
   const [formLink, setFormLink] = useState("");
+  const [originalFormLink, setOriginalFormLink] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
 
   const fetchCarreras = async () => {
@@ -31,6 +34,7 @@ const Ofertas = () => {
 
   const fetchRamos = async () => {
     if (selectedCarrera) {
+      console.log("Ejecutando fetchRamos. Carrera seleccionada:", selectedCarrera);
       try {
         console.log("Solicitando ramos para la carrera:", selectedCarrera);
         const response = await fetch(`/api/ramos/${selectedCarrera.id}`);
@@ -38,6 +42,7 @@ const Ofertas = () => {
         const data = await response.json();
         console.log("Ramos obtenidos:", data);
         setRamos(data);
+        console.log("Estado de ramos actualizado:", data);
   
         // Recuperar el estado de las ofertas
         const offerStatesResponse = await fetch(`/api/estado-oferta/${selectedCarrera.id}`);
@@ -70,7 +75,7 @@ const Ofertas = () => {
   
 
   useEffect(() => {
-    //console.log("Carrera seleccionada:", selectedCarrera);
+    console.log("Carrera seleccionada ha cambiado:", selectedCarrera);
     fetchRamos();
   }, [selectedCarrera]);
 
@@ -99,10 +104,12 @@ const Ofertas = () => {
       const data = await response.json();
       setSelectedProfessors(data.profesoresAsignados);
       setFormLink(data.enlaceFormulario);
+      setOriginalFormLink(data.enlaceFormulario); // Guardamos el valor original del enlace
     } catch (error) {
       console.error("Error al obtener la información del ramo:", error);
     }
   };
+  
 
   useEffect(() => {
     if (selectedRamo) {
@@ -242,14 +249,18 @@ const Ofertas = () => {
     }
   };
   
-
-  const filteredRamos = ramos.filter(
-    (ramo) =>
-      (ramo.nombre.toLowerCase().includes(searchRamo.toLowerCase()) ||
-        ramo.sigla.toLowerCase().includes(searchRamo.toLowerCase())) &&
-      (semesterFilter === "" || ramo.semestre === semesterFilter)
+  console.log("Ramos antes del filtrado:", ramos);
+const filteredRamos = ramos.filter((ramo) => {
+  console.log("Semestre del ramo:", ramo.semestre);
+  return (
+    (ramo.nombre.toLowerCase().includes(searchRamo.toLowerCase()) ||
+     ramo.sigla.toLowerCase().includes(searchRamo.toLowerCase())) &&
+    (semesterFilter === "" || ramo.semestre.trim().toLowerCase() === semesterFilter.trim().toLowerCase())
   );
+});
+
   
+
   //console.log("Ramos filtrados para mostrar:", filteredRamos);
   
   async function getFormId(ramoId) {
@@ -266,6 +277,7 @@ const Ofertas = () => {
   // Nueva función para generar y descargar la hoja de cálculo
   const handleGenerateAndDownloadSheet = async (ramoId) => {
     try {
+      setLoading(true); // Mostrar el overlay
       const response = await axios.post(`http://localhost:3001/api/generate_and_transfer/${ramoId}`);
       const spreadsheetId = response.data.spreadsheetId;
   
@@ -274,8 +286,11 @@ const Ofertas = () => {
       window.open(downloadUrl, '_blank');
     } catch (error) {
       console.error('Error al generar y descargar la hoja de cálculo:', error);
+    } finally {
+      setLoading(false); // Ocultar el overlay
     }
   };
+  
 
   const handleSendSheetToProfessors = async (ramoId) => {
     if (!ramoId) {
@@ -291,10 +306,13 @@ const Ofertas = () => {
       alert('Hubo un error al intentar enviar la hoja de cálculo a los docentes');
     }
   };
-  
 
   return (
     <div className="ofertas-container flex">
+      {loading && (
+      <div className="overlay fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
+        <div className="text-white text-2xl">Generando hoja de resultados...</div>
+      </div>)}
       <div className="carreras-list w-1/3 bg-white p-4">
         <h2 className="mb-10 text-orange-500 text-xl font-bold">Gestión de ofertas para ayudantías</h2>
         <ul className="list-none p-0">
@@ -318,14 +336,14 @@ const Ofertas = () => {
           <div className="card p-4 rounded shadow">
             <h3 className="text-orange-500 text-lg font-bold">{`${selectedRamo.sigla} - ${selectedRamo.nombre}`}</h3>
             <div className="profesores-section my-4">
-              <label className="text-gray-500">Seleccionar profesor:</label>
+              <label className="text-gray-500">Seleccionar Profesor:</label>
               <select
                 className="border p-2 rounded w-full my-2"
                 onChange={(e) => handleAssignProfessor(parseInt(e.target.value))}
                 value=""
               >
                 <option value="" disabled>
-                  Selecciona un profesor
+                  Seleccione un profesor
                 </option>
                 {profesores.map((profesor) => (
                   <option key={profesor.id} value={profesor.id}>
@@ -357,17 +375,17 @@ const Ofertas = () => {
             </div>
   
             <div className="buttons-section mt-4 flex space-x-4">
-              <button className="bg-blue-500 text-white p-2 rounded" onClick={handleSaveLink}>
-                Guardar cambios
+              <button className="bg-blue-500 text-white p-2 rounded ml-4" onClick={handleSaveLink}>
+                Guardar URL
               </button>
-              <button className="bg-red-500 text-white p-2 rounded" onClick={() => setFormLink("")}>
-                Cancelar
+              <button className="bg-red-500 text-white p-2 rounded" onClick={() => setFormLink(originalFormLink)}>
+                Cancelar<br/>cambio de URL
               </button>
               <button className="bg-green-500 text-white p-2 rounded" onClick={() => handleGenerateAndDownloadSheet(selectedRamo.id)}>
-                Descargar datos de hoja de cálculo
+                Descargar respuestas<br/>del formulario
               </button>
-              <button className="bg-purple-500 text-white p-2 rounded" onClick={() => handleSendSheetToProfessors(selectedRamo.id)}>
-                Enviar resultados a docentes
+              <button className="bg-gray-500 text-white p-2 rounded" onClick={() => handleSendSheetToProfessors(selectedRamo.id)}>
+                Enviar resultados<br/>a docentes
               </button>
 
 
@@ -408,8 +426,14 @@ const Ofertas = () => {
                 onChange={(e) => setSemesterFilter(e.target.value)}
               >
                 <option value="">Todos los semestres</option>
-                <option value="primer semestre">Primer semestre</option>
-                <option value="segundo semestre">Segundo semestre</option>
+                <option value="primer semestre">primer semestre</option>
+                <option value="segundo semestre">segundo semestre</option>
+                <option value="segundo semestre">tercer semestre</option>
+                <option value="segundo semestre">cuarto semestre</option>
+                <option value="segundo semestre">quinto semestre</option>
+                <option value="segundo semestre">sexto semestre</option>
+                <option value="segundo semestre">séptimo semestre</option>
+                <option value="segundo semestre">octavo semestre</option>
               </select>
             </div>
   
