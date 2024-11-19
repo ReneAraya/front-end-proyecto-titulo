@@ -75,9 +75,14 @@ const Ofertas = () => {
   
 
   useEffect(() => {
-    console.log("Carrera seleccionada ha cambiado:", selectedCarrera);
-    fetchRamos();
+    if (selectedCarrera) {
+      console.log("Ejecutando fetchRamos. Carrera seleccionada:", selectedCarrera);
+      fetchRamos();
+    } else {
+      console.log("Carrera no seleccionada, no se solicitarán ramos.");
+    }
   }, [selectedCarrera]);
+  
 
   const fetchProfessors = async () => {
     try {
@@ -249,19 +254,18 @@ const Ofertas = () => {
     }
   };
   
-  console.log("Ramos antes del filtrado:", ramos);
-const filteredRamos = ramos.filter((ramo) => {
-  console.log("Semestre del ramo:", ramo.semestre);
-  return (
-    (ramo.nombre.toLowerCase().includes(searchRamo.toLowerCase()) ||
-     ramo.sigla.toLowerCase().includes(searchRamo.toLowerCase())) &&
-    (semesterFilter === "" || ramo.semestre.trim().toLowerCase() === semesterFilter.trim().toLowerCase())
-  );
-});
-
+  const filteredRamos = ramos.filter((ramo) => {
+    console.log("Valor de semesterFilter:", semesterFilter);
+    console.log("Semestre del ramo antes del filtrado:", ramo.semestre);
+  
+    return (
+      (ramo.nombre.toLowerCase().includes(searchRamo.toLowerCase()) ||
+        ramo.sigla.toLowerCase().includes(searchRamo.toLowerCase())) &&
+      (semesterFilter === "" || ramo.semestre.trim().toLowerCase() === semesterFilter.trim().toLowerCase())
+    );
+  });
   
 
-  //console.log("Ramos filtrados para mostrar:", filteredRamos);
   
   async function getFormId(ramoId) {
     try {
@@ -423,7 +427,10 @@ const filteredRamos = ramos.filter((ramo) => {
               <select
                 className="border p-2 rounded"
                 value={semesterFilter}
-                onChange={(e) => setSemesterFilter(e.target.value)}
+                onChange={(e) => {
+                  console.log("Semestre seleccionado:", e.target.value);
+                  setSemesterFilter(e.target.value);
+                }}
               >
                 <option value="">Todos los semestres</option>
                 <option value="primer semestre">primer semestre</option>
