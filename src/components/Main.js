@@ -8,6 +8,8 @@ import OfferManagement from '../pages/OfferManagement';
 import ProfessorDashboard from '../pages/ProfessorDashboard';
 import ProfessorRamos from '../pages/ProfessorRamos';
 import ProfessorFormulario from '../pages/ProfessorFormulario';
+import VerificarCorreo from '../pages/VerificarCorreo';
+import FormularioPostulante from '../pages/FormularioPostulante';
 
 const Main = () => {
   return (
@@ -20,6 +22,8 @@ const Main = () => {
           <Route path="/profesor" element={<ProfessorDashboard />} />
           <Route path="/profesor/carrera/:carreraId/ramos" element={<ProfessorRamos />} />
           <Route path="/profesor/ramo/:ramoId/formulario" element={<ProfessorFormulario />} />
+          <Route path="/formulario/verificar/:ramoId/:carreraId" element={<VerificarCorreo />} />
+          <Route path="/formulario/:ramoId/:carreraId" element={<FormularioPostulante />} />
         </Routes>
       </div>
     </main>

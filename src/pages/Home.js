@@ -68,7 +68,9 @@ const Home = () => {
     const toggleOpen3 = () => setIsOpen3(!isOpen3);
 
     const handleOfferClick = (ramoId, carreraId) => {
-        navigate(`/formulario/${ramoId}/${carreraId}`);
+        if (ramoId && carreraId) {
+            navigate(`/formulario/verificar/${ramoId}/${carreraId}`);
+        }
     };
 
     return (
