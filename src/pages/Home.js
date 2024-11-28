@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 const Home = () => {
@@ -9,6 +10,7 @@ const Home = () => {
     const [ofertas1, setOfertas1] = useState([]);
     const [ofertas2, setOfertas2] = useState([]);
     const [ofertas3, setOfertas3] = useState([]);
+    const navigate = useNavigate();
 
     // Detectar cambio de tamaño de pantalla
     useEffect(() => {
@@ -65,6 +67,10 @@ const Home = () => {
     const toggleOpen2 = () => setIsOpen2(!isOpen2);
     const toggleOpen3 = () => setIsOpen3(!isOpen3);
 
+    const handleOfferClick = (ramoId, carreraId) => {
+        navigate(`/formulario/${ramoId}/${carreraId}`);
+    };
+
     return (
         <div className="container mx-auto py-4 w-full">
             <h1 className="text-3xl font-bold text-orange-500 text-center mb-10">Ofertas Ayudantías Primer Semestre 2025</h1>
@@ -86,9 +92,12 @@ const Home = () => {
                                     {ofertas1.length > 0 ? (
                                         ofertas1.map((oferta, index) => (
                                             <li key={index} className="my-2">
-                                                <a href={oferta.enlace} className="text-cyan-500 hover:underline"target="_blank" rel="noopener noreferrer">
+                                                <button
+                                                    onClick={() => handleOfferClick(oferta.ramo_id, oferta.carrera_id)}
+                                                    className="text-cyan-500 hover:underline"
+                                                >
                                                     {`${oferta.sigla} - ${oferta.nombre}`}
-                                                </a>
+                                                </button>
                                             </li>
                                         ))
                                     ) : (
@@ -116,9 +125,12 @@ const Home = () => {
                                     {ofertas2.length > 0 ? (
                                         ofertas2.map((oferta, index) => (
                                             <li key={index} className="my-2">
-                                                <a href={oferta.enlace} className="text-cyan-500 hover:underline"target="_blank" rel="noopener noreferrer">
+                                                <button
+                                                    onClick={() => handleOfferClick(oferta.ramo_id, oferta.carrera_id)}
+                                                    className="text-cyan-500 hover:underline"
+                                                >
                                                     {`${oferta.sigla} - ${oferta.nombre}`}
-                                                </a>
+                                                </button>
                                             </li>
                                         ))
                                     ) : (
@@ -146,9 +158,12 @@ const Home = () => {
                                     {ofertas3.length > 0 ? (
                                         ofertas3.map((oferta, index) => (
                                             <li key={index} className="my-2">
-                                                <a href={oferta.enlace} className="text-cyan-500 hover:underline"target="_blank" rel="noopener noreferrer">
+                                                <button
+                                                    onClick={() => handleOfferClick(oferta.ramo_id, oferta.carrera_id)}
+                                                    className="text-cyan-500 hover:underline"
+                                                >
                                                     {`${oferta.sigla} - ${oferta.nombre}`}
-                                                </a>
+                                                </button>
                                             </li>
                                         ))
                                     ) : (
