@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -7,19 +9,28 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
-  // Usuario y contraseña válidos
-  const validEmail = "postulacion.ayudantias.eii@gmail.com";
-  const validPassword = "Postulacion.ayudantias.EII.2024";
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/api/login', { email, password });
 
-  const handleLogin = () => {
-    if (email !== validEmail) {
-      setErrorMessage('Correo incorrecto o usuario no registrado.');
-    } else if (password !== validPassword) {
-      setErrorMessage('Contraseña incorrecta.');
-    } else {
-      setErrorMessage('');
-      //alert('Inicio de sesión exitoso');
-      navigate('/OfferManagement'); // Redirige a la ruta de OfferManagement.js
+      // Guardar el token JWT en el almacenamiento local
+      const token = response.data.token;
+      localStorage.setItem('authToken', token);
+
+      // Decodificar el token para obtener la información del usuario
+      const decodedToken = jwtDecode(token);
+      const { rol_id } = decodedToken;
+
+      // Redirigir solo si el rol es administrador
+      if (rol_id === 1) {
+        navigate('/offerManagement'); // Redirigir al administrador a la gestión de ofertas
+      } else {
+        setErrorMessage('Inicio de sesión exitoso.');
+      }
+
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      setErrorMessage('Correo o contraseña incorrectos.');
     }
   };
 
