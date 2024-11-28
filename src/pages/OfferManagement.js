@@ -20,43 +20,24 @@ const Ofertas = () => {
   const [originalFormLink, setOriginalFormLink] = useState("");
   const [loading, setLoading] = useState(false);
 
+
 //////////
 //NUEVO///
 //////////
-  // En el componente `Ofertas`, añade un nuevo estado para manejar el despliegue del formulario
-  const [showForm, setShowForm] = useState(false); // Nuevo estado para controlar si se muestra el formulario
-  
-  // Cuando un `ramo` es seleccionado, permite al profesor ver las respuestas del formulario o asignar ayudantes
-  // (modificación en el render principal)
-  <div className="buttons-section mt-4 flex space-x-4">
-    <button className="bg-blue-500 text-white p-2 rounded ml-4" onClick={handleSaveLink}>
-      Guardar URL
-    </button>
-    <button className="bg-red-500 text-white p-2 rounded" onClick={() => setFormLink(originalFormLink)}>
-      Cancelar<br/>cambio de URL
-    </button>
-    <button className="bg-green-500 text-white p-2 rounded" onClick={() => handleGenerateAndDownloadSheet(selectedRamo.id)}>
-      Descargar respuestas<br/>del formulario
-    </button>
-    <button className="bg-gray-500 text-white p-2 rounded" onClick={() => handleSendSheetToProfessors(selectedRamo.id)}>
-      Enviar resultados<br/>a docentes
-    </button>
-    <button className="bg-orange-500 text-white p-2 rounded" onClick={() => setShowForm(!showForm)}>
-      {showForm ? "Ocultar Formulario" : "Mostrar Formulario"}
-    </button>
-  </div>
-  
-  // Luego, dentro del `return`, cuando el `ramo` esté seleccionado, muestra el formulario si `showForm` es verdadero
-  {showForm && (
-    <div className="mt-4">
-      <h3 className="text-orange-500 text-lg font-bold">Formulario para {selectedRamo.sigla} - {selectedRamo.nombre}</h3>
-      <LocalForms ramoId={selectedRamo.id} carreraId={selectedCarrera.id} anio={2025} semestre={"primer semestre"} />
-    </div>
-  )}
-  
-//////////
-//NUEVO///
-//////////
+
+  const handleSaveLink = async () => {
+    try {
+      await fetch(`/api/ramos/${selectedRamo.id}/formulario`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enlace: formLink }),
+      });
+      alert("Enlace del formulario actualizado con éxito");
+    } catch (error) {
+      console.error("Error al guardar el enlace del formulario:", error);
+    }
+  };
+
   const fetchCarreras = async () => {
     try {
       const response = await fetch("/api/carreras"); // Ajusta la ruta si es necesario
@@ -200,18 +181,7 @@ const Ofertas = () => {
     }
   };
 
-  const handleSaveLink = async () => {
-    try {
-      await fetch(`/api/ramos/${selectedRamo.id}/formulario`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ enlace: formLink }),
-      });
-      alert("Enlace del formulario actualizado con éxito");
-    } catch (error) {
-      console.error("Error al guardar el enlace del formulario:", error);
-    }
-  };
+  
 
   const handleActivateAllOffers = async (e) => {
     const activate = e.target.checked;

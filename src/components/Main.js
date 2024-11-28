@@ -5,6 +5,9 @@ import { Route, Routes } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import OfferManagement from '../pages/OfferManagement';
+import ProfessorDashboard from '../pages/ProfessorDashboard';
+import ProfessorRamos from '../pages/ProfessorRamos';
+import ProfessorFormulario from '../pages/ProfessorFormulario';
 
 const Main = () => {
   return (
@@ -13,8 +16,10 @@ const Main = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          {/* Ruta para la gestión de ofertas */}
           <Route path="/offerManagement" element={<OfferManagement />} />
+          <Route path="/profesor" element={<ProfessorDashboard />} />
+          <Route path="/profesor/carrera/:carreraId/ramos" element={<ProfessorRamos />} />
+          <Route path="/profesor/ramo/:ramoId/formulario" element={<ProfessorFormulario />} />
         </Routes>
       </div>
     </main>

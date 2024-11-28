@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,24 +13,26 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:3001/api/login', { email, password });
 
-      // Guardar el token JWT en el almacenamiento local
-      const token = response.data.token;
-      localStorage.setItem('authToken', token);
+      if (response.status === 200 && response.data.token) {
+        const token = response.data.token;
+        localStorage.setItem('token', token);
 
-      // Decodificar el token para obtener la información del usuario
-      const decodedToken = jwtDecode(token);
-      const { rol_id } = decodedToken;
+        // Decodificar el token para obtener la información del usuario
+        const user = jwtDecode(token);
 
-      // Redirigir solo si el rol es administrador
-      if (rol_id === 1) {
-        navigate('/offerManagement'); // Redirigir al administrador a la gestión de ofertas
+        if (user.rol_id === 1) {
+          navigate('/offerManagement');
+        } else if (user.rol_id === 2) {
+          navigate('/profesor');
+        } else {
+          setErrorMessage('Rol no autorizado.');
+        }
       } else {
-        setErrorMessage('Inicio de sesión exitoso.');
+        setErrorMessage('Credenciales incorrectas. Por favor, inténtelo de nuevo.');
       }
-
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-      setErrorMessage('Correo o contraseña incorrectos.');
+      console.error('Error durante el inicio de sesión:', error);
+      setErrorMessage('Credenciales incorrectas. Por favor, inténtelo de nuevo.');
     }
   };
 
@@ -38,7 +40,7 @@ const Login = () => {
     <div className="container">
       <div className="login-card">
         <h1 className="text-3xl font-bold text-orange-500 text-center mb-4">Log in</h1>
-        <p className="text-small"><b>Inicio de sesión solo para jefe de docencia</b></p>
+        <p className="text-small"><b>Inicio de sesión solo para jefe de docencia y profesores</b></p>
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         <input
           type="email"
