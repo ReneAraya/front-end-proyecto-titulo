@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronRight, FaSearch, FaTrashAlt, FaInfoCircle } from "react-icons/fa";
-import axios from 'axios';
-
-import LocalForms from '../pages/LocalForms'; // Importa el componente del formulario
 
 const Ofertas = () => {
   const [carreras, setCarreras] = useState([]);
@@ -16,27 +13,13 @@ const Ofertas = () => {
   const [semesterFilter, setSemesterFilter] = useState("");
   const [allOffersActivated, setAllOffersActivated] = useState({});
   const [offerStates, setOfferStates] = useState({});
-  const [formLink, setFormLink] = useState("");
-  const [originalFormLink, setOriginalFormLink] = useState("");
-  const [loading, setLoading] = useState(false);
+
 
 
 //////////
 //NUEVO///
 //////////
 
-  const handleSaveLink = async () => {
-    try {
-      await fetch(`/api/ramos/${selectedRamo.id}/formulario`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ enlace: formLink }),
-      });
-      alert("Enlace del formulario actualizado con éxito");
-    } catch (error) {
-      console.error("Error al guardar el enlace del formulario:", error);
-    }
-  };
 
   const fetchCarreras = async () => {
     try {
@@ -89,7 +72,6 @@ const Ofertas = () => {
       console.log("Carrera no seleccionada, no se solicitarán ramos.");
     }
   };
-  
 
   useEffect(() => {
     if (selectedCarrera) {
@@ -99,7 +81,6 @@ const Ofertas = () => {
       console.log("Carrera no seleccionada, no se solicitarán ramos.");
     }
   }, [selectedCarrera]);
-  
 
   const fetchProfessors = async () => {
     try {
@@ -125,8 +106,6 @@ const Ofertas = () => {
       if (!response.ok) throw new Error("Error al obtener la información del ramo");
       const data = await response.json();
       setSelectedProfessors(data.profesoresAsignados);
-      setFormLink(data.enlaceFormulario);
-      setOriginalFormLink(data.enlaceFormulario); // Guardamos el valor original del enlace
     } catch (error) {
       console.error("Error al obtener la información del ramo:", error);
     }
@@ -270,59 +249,9 @@ const Ofertas = () => {
       (semesterFilter === "" || ramo.semestre.trim().toLowerCase() === semesterFilter.trim().toLowerCase())
     );
   });
-  
-
-  
-  async function getFormId(ramoId) {
-    try {
-      const response = await axios.get(`http://localhost:3001/api/ramos/${ramoId}/formulario`);
-      return response.data.formId;
-    } catch (error) {
-      console.error('Error al obtener el formId:', error);
-      throw new Error('No se pudo obtener el formId');
-    }
-  }
-  
-
-  // Nueva función para generar y descargar la hoja de cálculo
-  const handleGenerateAndDownloadSheet = async (ramoId) => {
-    try {
-      setLoading(true); // Mostrar el overlay
-      const response = await axios.post(`http://localhost:3001/api/generate_and_transfer/${ramoId}`);
-      const spreadsheetId = response.data.spreadsheetId;
-  
-      // Generar el enlace de descarga y abrirlo en una nueva ventana
-      const downloadUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=xlsx`;
-      window.open(downloadUrl, '_blank');
-    } catch (error) {
-      console.error('Error al generar y descargar la hoja de cálculo:', error);
-    } finally {
-      setLoading(false); // Ocultar el overlay
-    }
-  };
-  
-
-  const handleSendSheetToProfessors = async (ramoId) => {
-    if (!ramoId) {
-      alert('El ID del ramo no está definido');
-      return;
-    }
-  
-    try {
-      const response = await axios.post(`http://localhost:3001/api/ramos/${ramoId}/enviar-hoja-a-docentes`);
-      alert('Resultados enviados a los docentes correctamente');
-    } catch (error) {
-      console.error('Error al enviar la hoja de cálculo a los docentes:', error);
-      alert('Hubo un error al intentar enviar la hoja de cálculo a los docentes');
-    }
-  };
 
   return (
     <div className="ofertas-container flex">
-      {loading && (
-      <div className="overlay fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
-        <div className="text-white text-2xl">Generando hoja de resultados...</div>
-      </div>)}
       <div className="carreras-list w-1/3 bg-white p-4">
         <h2 className="mb-10 text-orange-500 text-xl font-bold">Gestión de ofertas para ayudantías</h2>
         <ul className="list-none p-0">
@@ -373,33 +302,6 @@ const Ofertas = () => {
                 ))}
               </ul>
             </div>
-  
-            <div className="form-link-section my-4">
-              <label className="text-gray-500">Enlace de Google Forms:</label>
-              <input
-                type="text"
-                className="border p-2 rounded w-full"
-                value={formLink}
-                onChange={(e) => setFormLink(e.target.value)}
-              />
-            </div>
-  
-            <div className="buttons-section mt-4 flex space-x-4">
-              <button className="bg-blue-500 text-white p-2 rounded ml-4" onClick={handleSaveLink}>
-                Guardar URL
-              </button>
-              <button className="bg-red-500 text-white p-2 rounded" onClick={() => setFormLink(originalFormLink)}>
-                Cancelar<br/>cambio de URL
-              </button>
-              <button className="bg-green-500 text-white p-2 rounded" onClick={() => handleGenerateAndDownloadSheet(selectedRamo.id)}>
-                Descargar respuestas<br/>del formulario
-              </button>
-              <button className="bg-gray-500 text-white p-2 rounded" onClick={() => handleSendSheetToProfessors(selectedRamo.id)}>
-                Enviar resultados<br/>a docentes
-              </button>
-
-
-            </div>
             <p className="mt-4 text-blue-500 cursor-pointer" onClick={() => setSelectedRamo(null)}>
               Volver al listado de ramos
             </p>
@@ -441,12 +343,6 @@ const Ofertas = () => {
                 <option value="">Todos los semestres</option>
                 <option value="primer semestre">primer semestre</option>
                 <option value="segundo semestre">segundo semestre</option>
-                <option value="segundo semestre">tercer semestre</option>
-                <option value="segundo semestre">cuarto semestre</option>
-                <option value="segundo semestre">quinto semestre</option>
-                <option value="segundo semestre">sexto semestre</option>
-                <option value="segundo semestre">séptimo semestre</option>
-                <option value="segundo semestre">octavo semestre</option>
               </select>
             </div>
   

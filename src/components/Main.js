@@ -23,8 +23,8 @@ const Main = () => {
           <Route path="/profesor/carrera/:carreraId/ramos" element={<ProfessorRamos />} />
           <Route path="/profesor/ramo/:ramoId/formulario" element={<ProfessorFormulario />} />
           <Route path="/formulario/verificar/:ramoId/:carreraId" element={<VerificarCorreo />} />
-          <Route path="/formulario/:ramoId/:carreraId" element={<FormularioPostulante />} />
           <Route path="/formulario/:ramoId/:carreraId/responder" element={<FormularioPostulante />} />
+
         </Routes>
       </div>
     </main>

@@ -51,6 +51,8 @@ const Home = () => {
             const data2 = await response2.json();
             const data3 = await response3.json();
 
+            console.log("Datos de ofertas:", { data1, data2, data3 }); // Verifica los datos obtenidos
+
             setOfertas1(data1);
             setOfertas2(data2);
             setOfertas3(data3);
@@ -67,9 +69,14 @@ const Home = () => {
     const toggleOpen2 = () => setIsOpen2(!isOpen2);
     const toggleOpen3 = () => setIsOpen3(!isOpen3);
 
-    const handleOfferClick = (ramoId, carreraId) => {
-        if (ramoId && carreraId) {
-            navigate(`/formulario/verificar/${ramoId}/${carreraId}`);
+    const handleOfferClick = (oferta) => {
+        const { ramo_id, carrera_id } = oferta;
+    
+        if (ramo_id && carrera_id) {
+            console.log('Clic en oferta con:', { ramoId: ramo_id, carreraId: carrera_id });
+            navigate(`/formulario/verificar/${ramo_id}/${carrera_id}`);
+        } else {
+            console.warn('ramoId o carreraId no están definidos:', { ramoId: ramo_id, carreraId: carrera_id });
         }
     };
 
@@ -95,7 +102,7 @@ const Home = () => {
                                         ofertas1.map((oferta, index) => (
                                             <li key={index} className="my-2">
                                                 <button
-                                                    onClick={() => handleOfferClick(oferta.ramo_id, oferta.carrera_id)}
+                                                    onClick={() => handleOfferClick(oferta)}
                                                     className="text-cyan-500 hover:underline"
                                                 >
                                                     {`${oferta.sigla} - ${oferta.nombre}`}
@@ -128,7 +135,7 @@ const Home = () => {
                                         ofertas2.map((oferta, index) => (
                                             <li key={index} className="my-2">
                                                 <button
-                                                    onClick={() => handleOfferClick(oferta.ramo_id, oferta.carrera_id)}
+                                                    onClick={() => handleOfferClick(oferta)}
                                                     className="text-cyan-500 hover:underline"
                                                 >
                                                     {`${oferta.sigla} - ${oferta.nombre}`}
@@ -161,7 +168,7 @@ const Home = () => {
                                         ofertas3.map((oferta, index) => (
                                             <li key={index} className="my-2">
                                                 <button
-                                                    onClick={() => handleOfferClick(oferta.ramo_id, oferta.carrera_id)}
+                                                    onClick={() => handleOfferClick(oferta)}
                                                     className="text-cyan-500 hover:underline"
                                                 >
                                                     {`${oferta.sigla} - ${oferta.nombre}`}
