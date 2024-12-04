@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Breadcrumbs from '../components/Breadcrumbs';
+import { useProfessorContext } from '../context/ProfessorContext';
 
 const ProfessorFormulario = () => {
-  const { ramoId } = useParams();
+  const { ramoId, carreraId } = useParams();
   const [respuestas, setRespuestas] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
+  const [nombreRamo, setNombreRamo] = useState('');
+  const [nombreCarrera, setNombreCarrera] = useState('');
   const [filters, setFilters] = useState({
     nota_aprobacion: '',
     veces_curso: ''
@@ -27,8 +31,22 @@ const ProfessorFormulario = () => {
       }
     };
 
+    const fetchRamoCarreraInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/api/ramos/${ramoId}/carrera/${carreraId}`);
+        setNombreRamo(response.data.ramo_nombre);
+        setNombreCarrera(response.data.carrera_nombre);
+      } catch (error) {
+        console.error('Error al obtener la información del ramo y carrera:', error);
+      }
+    };
+
+    if (!nombreRamo) {
+      fetchRamoCarreraInfo();
+    }
+
     fetchRespuestas();
-  }, [ramoId]);
+  }, [ramoId, carreraId, nombreRamo, setNombreRamo]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -65,10 +83,10 @@ const ProfessorFormulario = () => {
       setSuccessMessage(newAsignadoState ? 'Ayudante asignado correctamente' : 'Ayudante des-asignado correctamente');
       setShowPopup(true); // Mostrar el popup
 
-      // Ocultar el popup después de 3 segundos
+      // Ocultar el popup después de 2 segundos
       setTimeout(() => {
         setShowPopup(false);
-      }, 3000);
+      }, 2000);
     } catch (error) {
       console.error('Error al cambiar el estado del postulante:', error);
     }
@@ -76,18 +94,29 @@ const ProfessorFormulario = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold text-orange-500 text-center mb-4">Respuestas del Formulario</h1>
+      <div className="flex justify-start mb-4">
+        {nombreRamo && nombreCarrera && (
+          <Breadcrumbs
+            paths={[
+              { name: 'Carreras', path: '/profesor/dashboard' },
+              { name: `Ramos de carrera - ${nombreCarrera}`, path: `/profesor/carrera/${carreraId}/ramos` },
+              { name: `Respuestas formulario ${nombreRamo}`, path: '' },
+            ]}
+          />
+        )}
+      </div>
+      <h1 style={{ color: '#e87e04' }} className="text-3xl font-bold text-center mb-4">Respuestas del Formulario</h1>
       {successMessage && <p className="text-green-500">{successMessage}</p>}
 
       {/* Popup de Asignación */}
       {showPopup && (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-md text-center">
-            <h2 className="text-lg font-bold text-green-600">Actualización Exitosa</h2>
+            <h2 style={{ color: '#84af50' }} className="text-lg font-bold py-1">Actualización Exitosa</h2>
             <p>{successMessage}</p>
             <button
               onClick={() => setShowPopup(false)}
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+              className="mt-4 login-button px-6 py-2 rounded"
             >
               Cerrar
             </button>
@@ -136,7 +165,7 @@ const ProfessorFormulario = () => {
       <div className="overflow-x-auto">
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-[#3d6997] text-white">
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Seleccionar</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Nombre</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Rut</th>
@@ -154,9 +183,9 @@ const ProfessorFormulario = () => {
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Bloques Disponibles</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white text-black">
             {filteredRespuestas.map((respuesta) => (
-              <tr key={respuesta.id}>
+              <tr key={respuesta.id} className="row-hover-effect">
                 <td className="border border-gray-300 p-2 text-center">
                   <input
                     type="checkbox"

@@ -39,12 +39,12 @@ const Login = () => {
   return (
     <div className="container">
       <div className="login-card">
-        <h1 className="text-3xl font-bold text-orange-500 text-center mb-4">Log in</h1>
-        <p className="text-small"><b>Inicio de sesión solo para jefe de docencia y profesores</b></p>
+        <h1 style={{ color: '#e87e04' }} className="text-3xl font-bold text-center mb-4">Inicio de sesión</h1>
+        <p className="text-small"><b>Solo para jefe de docencia y profesores</b></p>
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Correo"
           className="input-field w-full"
           value={email}
           onChange={(e) => setEmail(e.target.value)}

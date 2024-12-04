@@ -253,7 +253,7 @@ const Ofertas = () => {
   return (
     <div className="ofertas-container flex">
       <div className="carreras-list w-1/3 bg-white p-4">
-        <h2 className="mb-10 text-orange-500 text-xl font-bold">Gestión de ofertas para ayudantías</h2>
+        <h2 style={{ color: '#e87e04' }} className="mb-10 text-xl font-bold">Gestión de ofertas para ayudantías</h2>
         <ul className="list-none p-0">
           {carreras.map((carrera) => (
             <li
@@ -273,7 +273,7 @@ const Ofertas = () => {
       <div className="ofertas-details w-2/3 bg-white p-4">
         {selectedRamo ? (
           <div className="card p-4 rounded shadow">
-            <h3 className="text-orange-500 text-lg font-bold">{`${selectedRamo.sigla} - ${selectedRamo.nombre}`}</h3>
+            <h3 style={{ color: '#e87e04' }} className=" text-lg font-bold">{`${selectedRamo.sigla} - ${selectedRamo.nombre}`}</h3>
             <div className="profesores-section my-4">
               <label className="text-gray-500">Seleccionar Profesor:</label>
               <select

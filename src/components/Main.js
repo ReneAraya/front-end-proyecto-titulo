@@ -20,8 +20,11 @@ const Main = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/offerManagement" element={<OfferManagement />} />
           <Route path="/profesor" element={<ProfessorDashboard />} />
+          <Route path="/profesor/dashboard" element={<ProfessorDashboard />} />
           <Route path="/profesor/carrera/:carreraId/ramos" element={<ProfessorRamos />} />
+          <Route path="/profesor/carrera/:carreraId/ramo/:ramoId/formulario" element={<ProfessorFormulario />} />
           <Route path="/profesor/ramo/:ramoId/formulario" element={<ProfessorFormulario />} />
+          <Route path="/profesor/ramo/:ramoId/carrera/:carreraId/formulario" element={<ProfessorFormulario />} />
           <Route path="/formulario/verificar/:ramoId/:carreraId" element={<VerificarCorreo />} />
           <Route path="/formulario/:ramoId/:carreraId/responder" element={<FormularioPostulante />} />
 

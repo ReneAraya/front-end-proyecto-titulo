@@ -363,7 +363,7 @@ const FormularioPostulante = () => {
           <h3 className="text-lg font-bold mb-4">Seleccione sus bloques académicos disponibles:</h3>
           <table className="table-auto w-full border-collapse border border-gray-300">
             <thead>
-              <tr>
+              <tr className="bg-[#3d6997] text-white">
                 <th className="border border-gray-300 p-2">Bloques / Días</th>
                 {['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'].map((dia) => (
                   <th key={dia} className="border border-gray-300 p-2">{dia}</th>
@@ -372,7 +372,7 @@ const FormularioPostulante = () => {
             </thead>
             <tbody>
               {['1-2', '3-4', '5-6', '7-8', '9-10', '11-12', '13-14'].map((bloque) => (
-                <tr key={bloque}>
+                <tr key={bloque} className="bg-white text-black">
                   <td className="border border-gray-300 p-2 text-center font-bold">{bloque}</td>
                   {['lunes', 'martes', 'miércoles', 'jueves', 'viernes'].map((dia) => (
                     <td key={dia} className="border border-gray-300 p-2 text-center">
@@ -414,6 +414,7 @@ const FormularioPostulante = () => {
             </tbody>
           </table>
         </div>
+
 
         <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
           Enviar Respuesta

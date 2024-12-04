@@ -34,7 +34,7 @@ export default function Navbar() {
 
   return (
     <nav className="nav">
-      <Link to="/" className="site-title">Sistema de postulaciones para Ayudantias</Link>
+      <Link to="/" className="site-title">Sistema de postulaciones para ayudantías</Link>
       <ul>
         {loggedIn ? (
           <>

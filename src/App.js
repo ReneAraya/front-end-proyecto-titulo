@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import Main from './components/Main';
 import { AuthProvider } from './context/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
+import { ProfessorProvider } from './context/ProfessorContext';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -48,13 +49,15 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="app-container">
-        <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
-        <main className="main-content">
-          <Main setIsAuthenticated={setIsAuthenticated} />
-        </main>
-        <Footer />
-      </div>
+      <ProfessorProvider>
+        <div className="app-container">
+          <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+          <main className="main-content">
+            <Main setIsAuthenticated={setIsAuthenticated} />
+          </main>
+          <Footer />
+        </div>
+      </ProfessorProvider>
     </AuthProvider>
   );
 }

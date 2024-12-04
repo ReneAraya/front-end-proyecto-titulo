@@ -82,7 +82,7 @@ const Home = () => {
 
     return (
         <div className="container mx-auto py-4 w-full">
-            <h1 className="text-3xl font-bold text-orange-500 text-center mb-10">Ofertas Ayudantías Primer Semestre 2025</h1>
+            <h1 style={{ color: '#e87e04' }} className="text-3xl font-bold text-center mb-10">Ofertas Ayudantías Primer Semestre 2025</h1>
 
             <div className="flex flex-col md:flex-row justify-center">
                 <div className="w-full md:w-1/3 flex flex-col mx-4 mb-6">
