@@ -30,7 +30,7 @@ const ProfessorDashboard = () => {
 
   return (
     <div className="container">
-      <h1 className="text-3xl font-bold text-orange-500 text-center mb-4">Dashboard del Profesor</h1>
+      <h1 className="text-3xl font-bold text-orange-500 text-center mb-4">Carreras</h1>
       <div className="list-carreras">
         {carreras.map((carrera) => (
           <div key={carrera.id} className="carrera-item bg-white p-4 rounded shadow mb-4 cursor-pointer" onClick={() => handleSelectCarrera(carrera.id)}>
