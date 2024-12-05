@@ -5,14 +5,14 @@ import { AuthContext } from '../context/AuthContext';
 import { FaUserCircle } from 'react-icons/fa';
 
 export default function Navbar() {
-  const { isLoggedIn, setIsLoggedIn, userRole, updateNavbar } = useContext(AuthContext);
+  const { isLoggedIn, logout, userRole } = useContext(AuthContext);
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(isLoggedIn);
 
   // Actualiza el estado local cuando el contexto cambia
   useEffect(() => {
     setLoggedIn(isLoggedIn);
-  }, [isLoggedIn, updateNavbar]);
+  }, [isLoggedIn]);
 
   // Función para manejar el clic en el ícono de usuario
   const handleUserIconClick = () => {
@@ -27,9 +27,8 @@ export default function Navbar() {
 
   // Función para manejar el cierre de sesión
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
-    navigate('/');
+    logout();
+    window.location.reload(); // Forzar recarga completa
   };
 
   return (
@@ -38,10 +37,11 @@ export default function Navbar() {
       <ul>
         {loggedIn ? (
           <>
-            <li className="user-icon">
-              <FaUserCircle size={24} onClick={handleUserIconClick} className="cursor-pointer" />
+            <li className="user-icon flex flex-col items-center cursor-pointer">
+              <FaUserCircle size={32} onClick={handleUserIconClick} className="mb-1" />
+              <span className="text-xs text-white">Dashboard</span>
             </li>
-            <li>
+            <li className="flex items-center justify-center">
               <button className="logout-button" onClick={handleLogout}>
                 Cerrar Sesión
               </button>

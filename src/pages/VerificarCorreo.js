@@ -13,11 +13,10 @@ const VerificarCorreo = () => {
     // Fetch para obtener ayudantes seleccionados
     const fetchAyudantesSeleccionados = async () => {
       try {
-        console.log('Iniciando fetch de ayudantes seleccionados...'); // Log para comprobar si se llama la función
+        console.log('Iniciando fetch de ayudantes seleccionados...');
         const response = await axios.get(`http://localhost:3001/api/ramos/${ramoId}/carrera/${carreraId}/ayudante`);
-        console.log('Respuesta del servidor para ayudantes seleccionados:', response.data); // Log para verificar qué datos se obtienen del backend
+        console.log('Respuesta del servidor para ayudantes seleccionados:', response.data);
 
-        // Comprobar si response.data es un array o un objeto y establecer el estado adecuadamente
         if (Array.isArray(response.data)) {
           setAyudantesSeleccionados(response.data);
         } else if (response.data && typeof response.data === 'object') {
@@ -36,6 +35,12 @@ const VerificarCorreo = () => {
   const handleVerificarCorreo = async () => {
     if (!email) {
       setErrorMessage('Debe ingresar un correo institucional.');
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@(mail\.pucv\.cl|pucv\.cl)$/;
+    if (!emailRegex.test(email)) {
+      setErrorMessage('Debe ingresar un correo que termine en @mail.pucv.cl o @pucv.cl');
       return;
     }
 
@@ -58,24 +63,26 @@ const VerificarCorreo = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 style={{ color: '#e87e04' }} className=" text-2xl font-bold mb-4">Verificación de Correo Institucional</h2>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Ingrese su correo institucional"
-        className="input-field rounded w-full mb-4"
-      />
-      <button onClick={handleVerificarCorreo}  className="login-button p-2 rounded w-full">
-        Verificar
-      </button>
-      {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>}
+    <div className="container mx-auto p-4 flex flex-col items-center">
+      <h2 style={{ color: '#e87e04' }} className="text-2xl font-bold mb-4">Verificación de Correo Institucional</h2>
+      <div className="w-full md:w-2/3 lg:w-1/2">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Ingrese su correo institucional"
+          className="input-field rounded w-full mb-4"
+        />
+        <button onClick={handleVerificarCorreo} className="login-button p-2 rounded w-full">
+          Verificar
+        </button>
+        {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>}
+      </div>
 
       {/* Sección para mostrar ayudantes seleccionados */}
-      <div className="mt-8 p-4 bg-gray-100 rounded-lg">
+      <div className="mt-8 p-4 bg-gray-100 rounded-lg w-full md:w-2/3 lg:w-1/2">
         <h3 className="text-lg font-semibold mb-2 ">Ayudantes Seleccionados:</h3>
-        {console.log('Ayudantes seleccionados en render:', ayudantesSeleccionados)} {/* Log para verificar qué hay en el estado antes de renderizar */}
+        {console.log('Ayudantes seleccionados en render:', ayudantesSeleccionados)}
         {ayudantesSeleccionados.length > 0 ? (
           ayudantesSeleccionados.map((ayudante, index) => (
             <p key={index} style={{ color: '#e87e04' }}>

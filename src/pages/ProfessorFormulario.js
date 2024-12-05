@@ -10,10 +10,15 @@ const ProfessorFormulario = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [nombreRamo, setNombreRamo] = useState('');
   const [nombreCarrera, setNombreCarrera] = useState('');
+
   const [filters, setFilters] = useState({
     nota_aprobacion: '',
     veces_curso: ''
   });
+  const [bloquesSeleccionados, setBloquesSeleccionados] = useState({});
+  const [mostrarBloques, setMostrarBloques] = useState(false);
+
+
   const [selectedPostulantes, setSelectedPostulantes] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
 
@@ -57,11 +62,31 @@ const ProfessorFormulario = () => {
   };
 
   const filteredRespuestas = respuestas.filter((respuesta) => {
-    return (
-      (filters.nota_aprobacion === '' || parseFloat(respuesta.nota_aprobacion) >= parseFloat(filters.nota_aprobacion)) &&
-      (filters.veces_curso === '' || respuesta.veces_curso === filters.veces_curso)
-    );
+    const cumpleNota = filters.nota_aprobacion === '' || parseFloat(respuesta.nota_aprobacion) >= parseFloat(filters.nota_aprobacion);
+    const cumpleVecesCurso = filters.veces_curso === '' || respuesta.veces_curso === filters.veces_curso;
+  
+    // Verificar si la respuesta cumple con los bloques seleccionados
+    let cumpleBloques = true;
+  
+    if (Object.keys(bloquesSeleccionados).length > 0) {
+      const bloquesDisponibles = typeof respuesta.bloques_disponibles === 'string'
+        ? JSON.parse(respuesta.bloques_disponibles)
+        : respuesta.bloques_disponibles;
+  
+      for (const [dia, bloques] of Object.entries(bloquesSeleccionados)) {
+        if (bloques.length > 0) {
+          const bloquesEstudiante = bloquesDisponibles[dia] || [];
+          if (!bloques.some((bloque) => bloquesEstudiante.includes(bloque))) {
+            cumpleBloques = false;
+            break;
+          }
+        }
+      }
+    }
+  
+    return cumpleNota && cumpleVecesCurso && cumpleBloques;
   });
+  
 
   const handleCheckboxChange = async (postulanteId, asignado) => {
     const token = localStorage.getItem('token');
@@ -106,7 +131,6 @@ const ProfessorFormulario = () => {
         )}
       </div>
       <h1 style={{ color: '#e87e04' }} className="text-3xl font-bold text-center mb-4">Respuestas del Formulario</h1>
-      {successMessage && <p className="text-green-500">{successMessage}</p>}
 
       {/* Popup de Asignación */}
       {showPopup && (
@@ -145,7 +169,7 @@ const ProfessorFormulario = () => {
               }
               handleFilterChange({ target: { name: e.target.name, value: valor } });
             }}
-            className="border p-2 rounded ml-2"
+            className="input-field border p-2 rounded ml-2"
             placeholder="X.X"
           />
         </label>
@@ -156,30 +180,87 @@ const ProfessorFormulario = () => {
             name="veces_curso"
             value={filters.veces_curso}
             onChange={handleFilterChange}
-            className="border p-2 rounded ml-2"
+            className="input-field border p-2 rounded ml-2"
           />
         </label>
+        {/*Boton bloques horario*/}
+        <button
+          onClick={() => setMostrarBloques(!mostrarBloques)}
+          className="bg-[#3d6997] text-white px-4 py-2 rounded mb-4"
+        >
+          {mostrarBloques ? 'Ocultar Bloques Horarios' : 'Mostrar Bloques Horarios'}
+        </button>
       </div>
+
+      {/*Filtro por bloque horario*/}
+
+      {mostrarBloques && (
+        <div className="mb-4">
+          <h3 className="text-lg font-bold mb-4">Seleccione los bloques académicos para filtrar:</h3>
+          <table className="table-auto border-collapse border border-gray-300 w-2/3 text-xs mx-auto">
+            <thead>
+              <tr className="bg-[#3d6997] text-white">
+                <th className="border border-gray-300 p-2">Bloques / Días</th>
+                {['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'].map((dia) => (
+                  <th key={dia} className="border border-gray-300 p-2">{dia}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="bg-white text-black">
+              {['1-2', '3-4', '5-6', '7-8', '9-10', '11-12', '13-14'].map((bloque) => (
+                <tr key={bloque}>
+                  <td className="border border-gray-300 p-2 text-center font-bold">{bloque}</td>
+                  {['lunes', 'martes', 'miércoles', 'jueves', 'viernes'].map((dia) => (
+                    <td key={dia} className="border border-gray-300 p-2 text-center">
+                      <input
+                        type="checkbox"
+                        checked={bloquesSeleccionados[dia]?.includes(bloque) || false}
+                        onChange={(e) => {
+                          const checked = e.target.checked;
+                          setBloquesSeleccionados((prevSeleccionados) => {
+                            const newBloques = [...(prevSeleccionados[dia] || [])];
+                            if (checked) {
+                              newBloques.push(bloque);
+                            } else {
+                              const index = newBloques.indexOf(bloque);
+                              if (index > -1) {
+                                newBloques.splice(index, 1);
+                              }
+                            }
+                            return { ...prevSeleccionados, [dia]: newBloques };
+                          });
+                        }}
+                        className="cursor-pointer"
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
 
       {/* Tabla de Respuestas */}
       <div className="overflow-x-auto">
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-[#3d6997] text-white">
-              <th className="border border-gray-300 p-2 text-xs md:text-sm">Seleccionar</th>
+              <th className="border border-gray-300 p-2 text-xs md:text-sm">Asignar</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Nombre</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Rut</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Correo</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Carrera</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Año de Ingreso</th>
-              <th className="border border-gray-300 p-2 text-xs md:text-sm">Veces Curso</th>
+              <th className="border border-gray-300 p-2 text-xs md:text-sm">Veces Cursado</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Nota Aprobación</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">¿Ha realizado ayudantías?</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Experiencia en evaluaciones</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">¿Ha realizado tutorías?</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Talleres UMDU</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Nivel de Riesgo</th>
-              <th className="border border-gray-300 p-2 text-xs md:text-sm">Motivos para ser Ayudante</th>
+              <th className="border border-gray-300 p-2 text-xs md:text-sm">Motivos para ser ayudante</th>
               <th className="border border-gray-300 p-2 text-xs md:text-sm">Bloques Disponibles</th>
             </tr>
           </thead>

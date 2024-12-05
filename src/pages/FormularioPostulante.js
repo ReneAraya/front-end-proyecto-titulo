@@ -130,8 +130,8 @@ const FormularioPostulante = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">
+    <div className="container w-full md:w-1/3 lg:w-2/3">
+      <h2 style={{ color: '#e87e04' }} className="text-2xl font-bold mb-4">
         Formulario de Postulación para Ayudantía: {ramoNombre} - {carreraNombre}
       </h2>
       <form onSubmit={handleSubmit}>
@@ -143,7 +143,7 @@ const FormularioPostulante = () => {
             name="respondent_email"
             value={formData.respondent_email}
             onChange={handleChange}
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
             readOnly
           />
         </label>
@@ -154,7 +154,7 @@ const FormularioPostulante = () => {
             name="rut"
             value={formData.rut}
             onChange={handleRutChange}
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
             placeholder="xxxxxxxx-x"
             maxLength="10"
           />
@@ -166,7 +166,7 @@ const FormularioPostulante = () => {
             name="nombres"
             value={formData.nombres}
             onChange={handleChange}
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
           />
         </label>
         <label className="block mb-2">
@@ -176,7 +176,7 @@ const FormularioPostulante = () => {
             name="apellidos"
             value={formData.apellidos}
             onChange={handleChange}
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
           />
         </label>
         <label className="block mb-2">
@@ -185,7 +185,7 @@ const FormularioPostulante = () => {
             name="carrera"
             value={formData.carrera}
             onChange={handleChange}
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
           >
             <option value="">Seleccione una carrera</option>
             <option value="Ingeniería Informática">Ingeniería Informática</option>
@@ -208,7 +208,7 @@ const FormularioPostulante = () => {
               }
             }}
             placeholder="Ej: 2022"
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
           />
         </label>
 
@@ -227,7 +227,7 @@ const FormularioPostulante = () => {
               }
             }}
             placeholder="Ej: 1"
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
           />
         </label>
 
@@ -247,7 +247,7 @@ const FormularioPostulante = () => {
               }
             }}
             placeholder="Ej: 6.0"
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
           />
         </label>
 
@@ -258,7 +258,7 @@ const FormularioPostulante = () => {
             name="ayudantias"
             value={formData.ayudantias}
             onChange={handleChange}
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
             rows="4" // Define la altura del textarea inicial
             style={{ resize: 'vertical' }} // Permite que el usuario pueda ajustar la altura
           />
@@ -271,7 +271,7 @@ const FormularioPostulante = () => {
             name="experiencia_evaluaciones"
             value={formData.experiencia_evaluaciones}
             onChange={handleChange}
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
             rows="4" // Define la altura del textarea inicial
             style={{ resize: 'vertical' }} // Permite que el usuario pueda ajustar la altura
           />
@@ -284,7 +284,7 @@ const FormularioPostulante = () => {
             name="tutorias"
             value={formData.tutorias}
             onChange={handleChange}
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
             rows="4" // Define la altura del textarea inicial
             style={{ resize: 'vertical' }} // Permite que el usuario pueda ajustar la altura
           />
@@ -298,7 +298,7 @@ const FormularioPostulante = () => {
             name="talleres_umdu"
             value={formData.talleres_umdu}
             onChange={handleChange}
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
             rows="4" // Define la altura del textarea inicial
             style={{ resize: 'vertical' }} // Permite que el usuario pueda ajustar la altura
           />
@@ -352,7 +352,7 @@ const FormularioPostulante = () => {
             name="motivo_ayudantia"
             value={formData.motivo_ayudantia}
             onChange={handleChange}
-            className="border p-2 rounded w-full mb-4"
+            className="input-field border p-2 rounded w-full mb-4"
             rows="4" // Define la altura del textarea inicial
             style={{ resize: 'vertical' }} // Permite que el usuario pueda ajustar la altura
           />
@@ -416,7 +416,7 @@ const FormularioPostulante = () => {
         </div>
 
 
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
+        <button type="submit" className="login-button p-2 rounded w-full">
           Enviar Respuesta
         </button>
       </form>
