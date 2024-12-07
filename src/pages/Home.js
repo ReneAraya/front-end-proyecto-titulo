@@ -12,6 +12,8 @@ const Home = () => {
     const [ofertas3, setOfertas3] = useState([]);
     const navigate = useNavigate();
 
+    const [currentPeriod, setCurrentPeriod] = useState('');
+
     // Detectar cambio de tamaño de pantalla
     useEffect(() => {
         const handleResize = () => {
@@ -80,9 +82,44 @@ const Home = () => {
         }
     };
 
+    useEffect(() => {
+        // Función para calcular el periodo lectivo actual con base en las fechas proporcionadas
+        const calculatePeriod = () => {
+          const today = new Date();
+          /*const today = new Date(2025, 7, 15); // Ejemplo: 15 de agosto de 2025*/
+          const year = today.getFullYear();
+          const month = today.getMonth() + 1; // Mes actual (0-11, por eso sumamos 1)
+          const day = today.getDate();
+    
+          // Definir los rangos de fechas
+          const primerSemestreInicio = new Date(year, 2, 5); // 5 de marzo
+          const primerSemestreFin = new Date(year, 5, 29); // 29 de junio
+          const segundoSemestreInicio = new Date(year, 7, 5); // 5 de agosto
+          const segundoSemestreFin = new Date(year, 10, 30); // 30 de noviembre
+    
+          if (today >= primerSemestreInicio && today <= primerSemestreFin) {
+            return `Primer Semestre ${year}`;
+          } else if (today >= segundoSemestreInicio && today <= segundoSemestreFin) {
+            return `Segundo Semestre ${year}`;
+          } else if (today > segundoSemestreFin) {
+            // Fuera de rango del segundo semestre, avanzar al próximo año
+            return `Primer Semestre ${year + 1}`;
+          } else {
+            // Antes del inicio del primer semestre, se considera el segundo semestre del año anterior
+            return `Segundo Semestre ${year - 1}`;
+          }
+        };
+    
+        setCurrentPeriod(calculatePeriod());
+      }, []);
+
     return (
         <div className="container mx-auto py-4 w-full">
-            <h1 style={{ color: '#e87e04' }} className="text-3xl font-bold text-center mb-10">Ofertas Ayudantías Primer Semestre 2025</h1>
+            <div>
+                <h1 style={{ color: '#e87e04' }} className="text-3xl font-bold text-center mb-10">
+                    Ofertas Ayudantías {currentPeriod}
+                </h1>
+            </div>
 
             <div className="flex flex-col md:flex-row justify-center">
                 <div className="w-full md:w-1/3 flex flex-col mx-4 mb-6">
