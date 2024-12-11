@@ -27,8 +27,8 @@ export default function Navbar() {
 
   // Función para manejar el cierre de sesión
   const handleLogout = () => {
-    logout();
-    window.location.reload(); // Forzar recarga completa
+    logout(); // Llama a la función de logout desde el contexto
+    navigate('/'); // Redirige al Home
   };
 
   return (
@@ -39,7 +39,7 @@ export default function Navbar() {
           <>
             <li className="user-icon flex flex-col items-center cursor-pointer">
               <FaUserCircle size={32} onClick={handleUserIconClick} className="mb-1" />
-              <span className="text-xs text-white">Dashboard</span>
+              <span className="text-xs text-white">Gestor</span>
             </li>
             <li className="flex items-center justify-center">
               <button className="logout-button" onClick={handleLogout}>

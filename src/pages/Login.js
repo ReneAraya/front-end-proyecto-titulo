@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { AuthContext } from '../context/AuthContext'; // Importar el contexto
 import axios from 'axios';
 
 const Login = () => {
@@ -8,6 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // Usar login desde el contexto
 
   const handleLogin = async () => {
     try {
@@ -15,11 +16,12 @@ const Login = () => {
 
       if (response.status === 200 && response.data.token) {
         const token = response.data.token;
-        localStorage.setItem('token', token);
 
-        // Decodificar el token para obtener la información del usuario
-        const user = jwtDecode(token);
+        // Usar el método login del contexto
+        login(token);
 
+        // Decodificar el token para redirigir según el rol
+        const user = JSON.parse(atob(token.split('.')[1])); // Decodificar el payload del JWT
         if (user.rol_id === 1) {
           navigate('/offerManagement');
         } else if (user.rol_id === 2) {

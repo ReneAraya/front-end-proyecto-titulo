@@ -37,7 +37,7 @@ const Ofertas = () => {
       console.log("Ejecutando fetchRamos. Carrera seleccionada:", selectedCarrera);
       try {
         console.log("Solicitando ramos para la carrera:", selectedCarrera);
-        const response = await fetch(`/api/ramos/${selectedCarrera.id}`);
+        const response = await fetch(`/api/ramos/${selectedCarrera.id}`); 
         if (!response.ok) throw new Error("Error al obtener los ramos");
         const data = await response.json();
         console.log("Ramos obtenidos:", data);
@@ -284,12 +284,16 @@ const Ofertas = () => {
                 <option value="" disabled>
                   Seleccione un profesor
                 </option>
-                {profesores.map((profesor) => (
-                  <option key={profesor.id} value={profesor.id}>
-                    {`${profesor.nombre} (${profesor.correo})`}
-                  </option>
-                ))}
+                {profesores
+                  .slice() // Crea una copia de la lista para evitar modificar el estado original
+                  .sort((a, b) => a.nombre.localeCompare(b.nombre)) // Ordena alfabéticamente por nombre
+                  .map((profesor) => (
+                    <option key={profesor.id} value={profesor.id}>
+                      {`${profesor.nombre} (${profesor.correo})`}
+                    </option>
+                  ))}
               </select>
+
   
               <ul className="my-4">
                 {selectedProfessors.map((profesor) => (
